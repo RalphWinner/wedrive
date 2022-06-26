@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/car")
+@RequestMapping("/api/v1/car")
 public class CarController {
     private final CarService carService;
 
