@@ -38,7 +38,7 @@ public class Car {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "insertBy", referencedColumnName = "admin_id")
     private Admin insertBy;
-
+    
     @JsonIgnore
     @OneToMany(mappedBy = "car")
     Set<Rental> rentals = new HashSet<>();

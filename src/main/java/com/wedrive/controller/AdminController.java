@@ -37,7 +37,7 @@ public class AdminController {
         rental.setStatus("Approved");
         car.setIs_rent(approve_denied == 1);
 
-        carService.saveCar(car);
+        carService.updateCar(car);
         rentalService.saveRental(rental);
 
 

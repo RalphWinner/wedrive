@@ -1,8 +1,11 @@
 package com.wedrive.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 import java.util.*;
 
@@ -17,29 +20,36 @@ public class Rental {
     @Column(name = "status")
     private String status = "On Hold";
     @Column(name = "start_date")
-    private Date start_date;
+    private LocalDateTime  start_date;
     @Column(name = "end_date")
-    private Date end_date;
-    @Column(name = "amount")
-    private float amount;
+    private LocalDateTime end_date;
+    @Column(name = "insert_date")
+    private LocalDateTime  insert_date;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id", referencedColumnName = "car_id")
     private Car car;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "rental")
+    @JsonManagedReference
+    private Payment payment;
 
-    public float getAmount() {
-        return amount;
+    public LocalDateTime getInsert_date() {
+        return insert_date;
     }
 
-    public void setAmount(float amount) {
-        try{
-            long noOfDaysBetween = DAYS.between((Temporal) this.start_date, (Temporal) this.end_date);
-            this.amount = amount*noOfDaysBetween;
-        }catch (Exception e){
-            this.amount = 0;
-        }
+    public void setInsert_date(LocalDateTime insert_date) {
+        this.insert_date = insert_date;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public Customer getCustomer() {
@@ -74,19 +84,19 @@ public class Rental {
         this.status = status;
     }
 
-    public Date getStart_date() {
+    public LocalDateTime getStart_date() {
         return start_date;
     }
 
-    public void setStart_date(Date start_date) {
+    public void setStart_date(LocalDateTime start_date) {
         this.start_date = start_date;
     }
 
-    public Date getEnd_date() {
+    public LocalDateTime getEnd_date() {
         return end_date;
     }
 
-    public void setEnd_date(Date end_date) {
+    public void setEnd_date(LocalDateTime end_date) {
         this.end_date = end_date;
     }
 
