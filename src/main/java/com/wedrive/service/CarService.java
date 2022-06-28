@@ -9,7 +9,7 @@ public interface CarService {
     List<Car> findAllCar();
     Optional<Car> findByID(Long id);
     Car findBycolor(String color);
-    String saveCar(Car car);
+    Car saveCar(Car car);
     void updateCar(Car car);
     void deleteCar(Long id);
 }

@@ -34,11 +34,13 @@ public class Car {
     private float price_per_day;
     @Column(name = "is_rent")
     private Boolean is_rent=false;
+    @Column(name = "image1")
+    private String image1;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "insertBy", referencedColumnName = "admin_id")
     private Admin insertBy;
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "car")
     Set<Rental> rentals = new HashSet<>();
