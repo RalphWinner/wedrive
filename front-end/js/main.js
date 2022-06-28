@@ -324,15 +324,32 @@ AOS.init({
 		addAdmin.on("submit", function (e) {
 			e.preventDefault()
 			const formData = formToObj(e.target)
-			console.log(formData)
 			$.ajax({
 				type: "POST",
 				url: "http://localhost:8080/api/v1/admin/save",
-				data: formData,
-				success: function(){
+				data: JSON.stringify(formData),
+				success: function(result){
 					alert("Success!")
 				},
-				dataType: "json"
+				dataType : "json",
+				contentType: "application/json; charset=utf-8"
+			  });
+		})
+	}
+	var addCar = $('#addCar')
+	if (addCar != null) {
+		addCar.on("submit", function (e) {
+			e.preventDefault()
+			const formData = formToObj(e.target)
+			$.ajax({
+				type: "POST",
+				url: "http://localhost:8080/api/v1/car/save",
+				data: JSON.stringify(formData),
+				success: function(result){
+					alert("Success!")
+				},
+				dataType : "json",
+				contentType: "application/json; charset=utf-8"
 			  });
 		})
 	}
