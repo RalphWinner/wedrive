@@ -319,36 +319,49 @@ AOS.init({
 		'autoclose': true
 	});
 	$('#time_pick').timepicker();
+
+
 	var addAdmin = $('#addAdmin')
+
 	if (addAdmin != null) {
+
 		addAdmin.on("submit", function (e) {
 			e.preventDefault()
 			const formData = formToObj(e.target)
+
 			$.ajax({
 				type: "POST",
 				url: "http://localhost:8080/api/v1/admin/save",
 				data: JSON.stringify(formData),
-				success: function(result){
-					alert("Success!")
+				success: function(){
+
+					$("#myModal").modal("show");
+					$("#addAdmin")[0].reset();
+				    
 				},
-				dataType : "json",
+				// dataType : "json",
 				contentType: "application/json; charset=utf-8"
 			  });
 		})
 	}
+
+
+
 	var addCar = $('#addCar')
 	if (addCar != null) {
 		addCar.on("submit", function (e) {
 			e.preventDefault()
 			const formData = formToObj(e.target)
+			formData
 			$.ajax({
 				type: "POST",
 				url: "http://localhost:8080/api/v1/car/save",
 				data: JSON.stringify(formData),
-				success: function(result){
-					alert("Success!")
+				success: function(){
+					$("#myModal").modal("show");
+					$("#addAdmin")[0].reset();
 				},
-				dataType : "json",
+				// dataType : "json",
 				contentType: "application/json; charset=utf-8"
 			  });
 		})
