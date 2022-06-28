@@ -27,106 +27,158 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="plugins/datatables/datatables.min.css">
 </head>
 
 <body>
     <div class="container-fluid">
-        <div class="pt-5">
+        <div class="pt-2">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-3">
+                    <div class="list-group" id="list-tab" role="tablist">
+                        <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
+                            href="#list-home" role="tab" aria-controls="home">Admins</a>
+                        <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
+                            href="#list-profile" role="tab" aria-controls="profile">Customers</a>
+                        <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list"
+                            href="#list-messages" role="tab" aria-controls="messages">Cars</a>
+                        <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list"
+                            href="#list-settings" role="tab" aria-controls="settings">Orders</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="list-home" role="tabpanel"
+                            aria-labelledby="list-home-list">
+                            <form id="addAdmin" action="#" class="mb-3 request-form ftco-animate bg-primary">
+                                <h2>Add admin</h2>
+                                <div class="d-flex">
+                                    <div class="form-group mr-2">
+                                        <label for="" class="label">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username"
+                                            placeholder="Username">
+                                    </div>
+                                    <div class="form-group ml-2">
+                                        <label for="" class="label">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="form-group ml-2">
+                                        <label for="" class="label">First Name</label>
+                                        <input type="text" class="form-control" id="user_first_name"
+                                            name="user.first_name" placeholder="First Name">
+                                    </div>
+                                    <div class="form-group ml-2">
+                                        <label for="" class="label">Last Name</label>
+                                        <input type="text" class="form-control" id="user_first_name"
+                                            name="user.last_name" placeholder="Last Name">
+                                    </div>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <label for="" class="label">Pick-up time</label>
+                                    <input type="text" class="form-control" id="time_pick" placeholder="Time">
+                                  </div> -->
+                                <div class="form-group">
+                                    <input type="submit" value="Add admin" class="btn btn-secondary py-3 px-4">
+                                </div>
+                            </form>
+                            <table class="admin-table table-striped table-bordered" style="width:100%"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
 
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="list-group" id="list-tab" role="tablist">
-                                <a class="list-group-item list-group-item-action active" id="list-home-list"
-                                    data-toggle="list" href="#list-home" role="tab" aria-controls="home">Admins</a>
-                                <a class="list-group-item list-group-item-action" id="list-profile-list"
-                                    data-toggle="list" href="#list-profile" role="tab"
-                                    aria-controls="profile">Customers</a>
-                                <a class="list-group-item list-group-item-action" id="list-messages-list"
-                                    data-toggle="list" href="#list-messages" role="tab"
-                                    aria-controls="messages">Cars</a>
-                                <a class="list-group-item list-group-item-action" id="list-settings-list"
-                                    data-toggle="list" href="#list-settings" role="tab"
-                                    aria-controls="settings">Orders</a>
-                            </div>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-8">
-                            <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="list-home" role="tabpanel"
-                                    aria-labelledby="list-home-list">
-                                    <form id="addAdmin" action="#" class="request-form ftco-animate bg-primary">
-                                        <h2>Add admin</h2>
-                                        <div class="d-flex">
-                                            <div class="form-group mr-2">
-                                                <label for="" class="label">Username</label>
-                                                <input type="text" class="form-control" id="username" name="username"
-                                                    placeholder="Username">
-                                            </div>
-                                            <div class="form-group ml-2">
-                                                <label for="" class="label">Password</label>
-                                                <input type="password" class="form-control" id="password"
-                                                    name="password" placeholder="Password">
-                                            </div>
-                                        </div>
-                                        <div class="d-flex">
-                                            <div class="form-group ml-2">
-                                                <label for="" class="label">First Name</label>
-                                                <input type="text" class="form-control" id="user_first_name"
-                                                    name="user.first_name" placeholder="First Name">
-                                            </div>
-                                            <div class="form-group ml-2">
-                                                <label for="" class="label">Last Name</label>
-                                                <input type="text" class="form-control" id="user_first_name"
-                                                    name="user.last_name" placeholder="Last Name">
-                                            </div>
-                                        </div>
-                                        <!-- <div class="form-group">
-                                            <label for="" class="label">Pick-up time</label>
-                                            <input type="text" class="form-control" id="time_pick" placeholder="Time">
-                                          </div> -->
-                                        <div class="form-group">
-                                            <input type="submit" value="Add admin" class="btn btn-secondary py-3 px-4">
-                                        </div>
-                                    </form>
+                        <div class="tab-pane fade" id="list-profile" role="tabpanel"
+                            aria-labelledby="list-profile-list">
+                            <form id="addCustomer" action="#" class="request-form ftco-animate bg-primary">
+                                <h2>Add customer</h2>
+                                <div class="d-flex">
+                                    <div class="form-group mr-2">
+                                        <label for="" class="label">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username"
+                                            placeholder="Username">
+                                    </div>
+                                    <div class="form-group ml-2">
+                                        <label for="" class="label">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Password">
+                                    </div>
                                 </div>
-                                <div class="tab-pane fade" id="list-profile" role="tabpanel"
-                                    aria-labelledby="list-profile-list">2</div>
-                                <div class="tab-pane fade" id="list-messages" role="tabpanel"
-                                    aria-labelledby="list-messages-list">
-                                    <form id="addCar" action="#" class="request-form ftco-animate bg-primary">
-                                        <h2>Add admin</h2>
-                                        <div class="d-flex">
-                                            <div class="form-group mr-2">
-                                                <label for="" class="label">Brand</label>
-                                                <input type="text" class="form-control" id="brand" name="brand"
-                                                    placeholder="Brand">
-                                            </div>
-                                            <div class="form-group ml-2">
-                                                <label for="" class="label">Model</label>
-                                                <input type="password" class="form-control" id="model"
-                                                    name="model" placeholder="Model">
-                                            </div>
-                                        </div>
-                                        <div class="d-flex">
-                                            <div class="form-group ml-2">
-                                                <label for=""  class="label">Image</label>
-                                                <input type="file" class="form-control" id="fileinput"
-                                                    name="file" placeholder="Image">
-                                            </div>
-                                        </div>
-                                        <!-- <div class="form-group">
-                                            <label for="" class="label">Pick-up time</label>
-                                            <input type="text" class="form-control" id="time_pick" placeholder="Time">
-                                          </div> -->
-                                        <div class="form-group">
-                                            <input type="submit" value="Add admin" class="btn btn-secondary py-3 px-4">
-                                        </div>
-                                    </form>
+                                <div class="d-flex">
+                                    <div class="form-group mr-2">
+                                        <label for="" class="label">First Name</label>
+                                        <input type="text" class="form-control" id="firstname" name="user.firstname"
+                                            placeholder="Firstname">
+                                    </div>
+                                    <div class="form-group ml-2">
+                                        <label for="" class="label">Last Name</label>
+                                        <input type="text" class="form-control" id="last_name" name="user.last_name"
+                                            placeholder="Last name">
+                                    </div>
                                 </div>
-                                <div class="tab-pane fade" id="list-settings" role="tabpanel"
-                                    aria-labelledby="list-settings-list">...</div>
-                            </div>
+                                <div class="d-flex">
+                                    <div class="form-group mr-2">
+                                        <label for="" class="label">Driver license</label>
+                                        <input type="text" class="form-control" id="driver_license"
+                                            name="driver_license" placeholder="Driver license">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Add customer" class="btn btn-secondary py-3 px-4">
+                                </div>
+                            </form>
+                            <table class="customer-table table-striped table-bordered" style="width:100%"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        </div>
+                        <div class="tab-pane fade" id="list-messages" role="tabpanel"
+                            aria-labelledby="list-messages-list">
+                            <form id="addCar" action="#" class="request-form ftco-animate bg-primary">
+                                <h2>Add admin</h2>
+                                <div class="d-flex">
+                                    <div class="form-group mr-2">
+                                        <label for="" class="label">Brand</label>
+                                        <input type="text" class="form-control" id="brand" name="brand"
+                                            placeholder="Brand">
+                                    </div>
+                                    <div class="form-group ml-2">
+                                        <label for="" class="label">Model</label>
+                                        <input type="password" class="form-control" id="model" name="model"
+                                            placeholder="Model">
+                                    </div>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="form-group ml-2">
+                                        <label for="" class="label">Image</label>
+                                        <input type="file" class="form-control" id="fileinput" name="file"
+                                            placeholder="Image">
+                                    </div>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <label for="" class="label">Pick-up time</label>
+                                    <input type="text" class="form-control" id="time_pick" placeholder="Time">
+                                  </div> -->
+                                <div class="form-group">
+                                    <input type="submit" value="Add admin" class="btn btn-secondary py-3 px-4">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="list-settings" role="tabpanel"
+                            aria-labelledby="list-settings-list">4
                         </div>
                     </div>
                 </div>
@@ -159,6 +211,7 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
     <script src="js/google-map.js"></script>
     <script src="plugins/form-to-obj/form-to-obj.js"></script>
+    <script src="plugins/datatables/datatables.min.js"></script>
     <script src="js/main.js"></script>
 
 </body>

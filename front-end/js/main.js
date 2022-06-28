@@ -367,6 +367,73 @@ AOS.init({
 			// });
 		})
 	}
+	var addCustomer = $('#addCustomer')
+	if (addCustomer != null) {
+		addCustomer.on("submit", function (e) {
+			e.preventDefault()
+			const formData = formToObj(e.target)
+			$.ajax({
+				type: "POST",
+				url: "http://localhost:8080/api/v1/customer/save",
+				data: JSON.stringify(formData),
+				success: function (result) {
+					alert("Success!")
+				},
+				dataType: "json",
+				contentType: "application/json; charset=utf-8"
+			});
+		})
+	}
+
+
+	function tableBuilder(table, data, attrs) {
+		const tableWrapper = $(table)
+		if (tableBuilder != null) {
+			tableWrapper.find("tbody").empty()
+			const header = tableWrapper.find("thead").find("tr")
+			header.empty()
+			for (let index = 0; index < attrs.length; index++) {
+				const element = attrs[index];
+				header.append(`<th>${element.toUpperCase()}</th>`)
+			}
+			for (let index = 0; index < data.length; index++) {
+				const element = data[index];
+				let row = ""
+				for (const key in element) {
+					if (Object.hasOwnProperty.call(element, key)) {
+						const innerElement = element[key];
+						if (attrs.includes(key)) {
+							row += `<td>${innerElement||"Not given"}</td>`
+						}
+					}
+				}
+				tableWrapper.find("tbody").append(`
+				<tr>
+                    ${row}
+				</tr>`)
+			}
+		}
+	}
+	$.ajax({
+		type: "GET",
+		url: "http://localhost:8080/api/v1/admin/",
+		success: function (result) {
+			tableBuilder(".admin-table", result, ["admin_id", "username"])
+			$('.admin-table').DataTable();
+		},
+		contentType: "application/json; charset=utf-8"
+	});
+	$.ajax({
+		type: "GET",
+		url: "http://localhost:8080/api/v1/customer/",
+		success: function (result) {
+			console.log(result)
+			tableBuilder(".customer-table", result, ["customer_id", "address","driver_licence"])
+			$('.customer-table').DataTable();
+		},
+		contentType: "application/json; charset=utf-8"
+	});
+
 
 })(jQuery);
 
