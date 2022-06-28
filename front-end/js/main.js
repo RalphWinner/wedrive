@@ -328,12 +328,12 @@ AOS.init({
 				type: "POST",
 				url: "http://localhost:8080/api/v1/admin/save",
 				data: JSON.stringify(formData),
-				success: function(result){
+				success: function (result) {
 					alert("Success!")
 				},
-				dataType : "json",
+				dataType: "json",
 				contentType: "application/json; charset=utf-8"
-			  });
+			});
 		})
 	}
 	var addCar = $('#addCar')
@@ -341,16 +341,30 @@ AOS.init({
 		addCar.on("submit", function (e) {
 			e.preventDefault()
 			const formData = formToObj(e.target)
+			const fileInput = $("#fileinput").prop('files')
+			console.log(fileInput)
+			formData.file = fileInput[0];
 			$.ajax({
-				type: "POST",
-				url: "http://localhost:8080/api/v1/car/save",
-				data: JSON.stringify(formData),
-				success: function(result){
-					alert("Success!")
-				},
-				dataType : "json",
-				contentType: "application/json; charset=utf-8"
-			  });
+				"url": "localhost:8080/api/v1/car/save/1",
+				"method": "POST",
+				"timeout": 0,
+				"processData": false,
+				"mimeType": "multipart/form-data",
+				"contentType": false,
+				"data": formData
+			}).done(function (response) {
+				console.log(response);
+			});
+			// $.ajax({
+			// 	type: "POST",
+			// 	url: "http://localhost:8080/api/v1/car/save",
+			// 	data: JSON.stringify(formData),
+			// 	success: function (result) {
+			// 		alert("Success!")
+			// 	},
+			// 	dataType: "json",
+			// 	contentType: "application/json; charset=utf-8"
+			// });
 		})
 	}
 
