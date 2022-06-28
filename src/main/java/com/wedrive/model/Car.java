@@ -1,6 +1,9 @@
 package com.wedrive.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -27,16 +30,48 @@ public class Car {
     private int max_capacity;
     @Column(name = "max_bag_allow")
     private int max_bag_allow;
+    @Column(name = "price_per_day")
+    private float price_per_day;
+    @Column(name = "is_rent")
+    private Boolean is_rent=false;
 
-//    @ManyToOne
-//    @JoinColumn(name = "createdBy")
-//    private User createdBy;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "insertBy", referencedColumnName = "admin_id")
+    private Admin insertBy;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "car")
+    Set<Rental> rentals = new HashSet<>();
 
     public Car() {
 
     }
 
-    public Car(long car_id, String brand, String model, Date last_service_date, int mileage, String color, String year, int max_capacity, int max_bag_allow) {
+    public Boolean getIs_rent() {
+        return is_rent;
+    }
+
+    public float getPrice_per_day() {
+        return price_per_day;
+    }
+
+    public void setPrice_per_day(float price_per_day) {
+        this.price_per_day = price_per_day;
+    }
+
+    public void setIs_rent(Boolean is_rent) {
+        this.is_rent = is_rent;
+    }
+
+    public Admin getInsertBy() {
+        return insertBy;
+    }
+
+    public void setInsertBy(Admin insertBy) {
+        this.insertBy = insertBy;
+    }
+
+    public Car(long car_id, String brand, String model, Date last_service_date, int mileage, String color, String year, int max_capacity, int max_bag_allow, boolean is_rent) {
         this.car_id = car_id;
         this.brand = brand;
         this.model = model;
@@ -46,6 +81,15 @@ public class Car {
         this.year = year;
         this.max_capacity = max_capacity;
         this.max_bag_allow = max_bag_allow;
+        this.is_rent = is_rent;
+    }
+
+    public Set<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(Set<Rental> rentals) {
+        this.rentals = rentals;
     }
 
     public long getCar_id() {
@@ -119,12 +163,4 @@ public class Car {
     public void setMax_bag_allow(int max_bag_allow) {
         this.max_bag_allow = max_bag_allow;
     }
-
-//    public User getCreatedBy() {
-//        return createdBy;
-//    }
-//
-//    public void setCreatedBy(User createdBy) {
-//        this.createdBy = createdBy;
-//    }
 }
