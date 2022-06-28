@@ -1,6 +1,7 @@
 package com.wedrive.service;
 
 import com.wedrive.model.Admin;
+import com.wedrive.model.User;
 
 import java.util.List;
 

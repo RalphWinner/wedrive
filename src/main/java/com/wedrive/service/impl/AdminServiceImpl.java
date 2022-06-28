@@ -6,6 +6,7 @@ import com.wedrive.repository.AdminRepository;
 import com.wedrive.service.AdminService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -19,6 +20,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public String saveAdmin(Admin admin) {
         User user = admin.getUser();
+        user.setCreatedAt(LocalDate.now());
         admin.setUser(user);
         adminRepository.save(admin);
         return "Saved";

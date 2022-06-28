@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -19,7 +20,7 @@ public class Car {
     @Column(name = "model")
     private String model;
     @Column(name = "last_service_date")
-    private Date last_service_date;
+    private LocalDate last_service_date;
     @Column(name = "mileage")
     private int mileage;
     @Column(name = "color")
@@ -49,6 +50,14 @@ public class Car {
 
     }
 
+    public String getImage1() {
+        return image1;
+    }
+
+    public void setImage1(String image1) {
+        this.image1 = image1;
+    }
+
     public Boolean getIs_rent() {
         return is_rent;
     }
@@ -73,7 +82,7 @@ public class Car {
         this.insertBy = insertBy;
     }
 
-    public Car(long car_id, String brand, String model, Date last_service_date, int mileage, String color, String year, int max_capacity, int max_bag_allow, boolean is_rent) {
+    public Car(long car_id, String brand, String model, LocalDate last_service_date, int mileage, String color, String year, int max_capacity, int max_bag_allow, boolean is_rent) {
         this.car_id = car_id;
         this.brand = brand;
         this.model = model;
@@ -126,11 +135,11 @@ public class Car {
         this.model = model;
     }
 
-    public Date getLast_service_date() {
+    public LocalDate getLast_service_date() {
         return last_service_date;
     }
 
-    public void setLast_service_date(Date last_service_date) {
+    public void setLast_service_date(LocalDate last_service_date) {
         this.last_service_date = last_service_date;
     }
 

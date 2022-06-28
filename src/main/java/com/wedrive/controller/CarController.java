@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.wedrive.service.CarService;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,21 +44,39 @@ public class CarController {
     public String saveCar(@PathVariable Long admin_id
             ,@RequestPart("file") MultipartFile file, @RequestPart Car car)
     {
-        Admin admin = adminService.findAdminbyID(admin_id);
-        car.setInsertBy(admin);
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-         Path uploadPath = Paths.get("Upload").toAbsolutePath().normalize();
+        Admin admin;
+        try{
+            admin = adminService.findAdminbyID(admin_id);
+        }catch (Exception exception){
+            return "Cannot save, Admin not exist -> " + exception.toString();
+        }
 
-         Car new_car = carService.saveCar(car);
+        String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+
+        if(!fileExtension.equals("jpg") && !fileExtension.equals("png") && !fileExtension.equals("jpeg")){
+            return "File not allowed to save << ." + fileExtension + " >>";
+        }
+
+        car.setInsertBy(admin);
+
+        // I save my car to get the auto generatedID
+        Car newCar = carService.saveCar(car);
+
+        //File name format CarID.png
+
+        String fileName = newCar.getCar_id()+"."+fileExtension;
+        newCar.setImage1(fileName);
+        carService.saveCar(newCar);
         // Copy file to the target location (Replacing existing file with the same name)
-        Path targetLocation = uploadPath.resolve( new_car.getCar_id() + "_" + fileName);
+        Path uploadPath = Paths.get("Upload").toAbsolutePath().normalize();
+        Path targetLocation = uploadPath.resolve(fileName);
         try {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return "Done";
+        return "Saved";
     }
 
     @PutMapping

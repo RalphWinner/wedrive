@@ -3,9 +3,11 @@ package com.wedrive.controller;
 import com.wedrive.model.Admin;
 import com.wedrive.model.Car;
 import com.wedrive.model.Rental;
+import com.wedrive.model.User;
 import com.wedrive.service.AdminService;
 import com.wedrive.service.CarService;
 import com.wedrive.service.RentalService;
+import com.wedrive.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,16 +18,30 @@ public class AdminController {
     private final AdminService adminService;
     private final RentalService rentalService;
     private final CarService carService;
+    private final UserService userService;
 
-    public AdminController(AdminService adminService, RentalService rentalService, CarService carService) {
+    public AdminController(AdminService adminService, RentalService rentalService, CarService carService, UserService userService) {
         this.adminService = adminService;
         this.rentalService = rentalService;
         this.carService = carService;
+        this.userService = userService;
     }
 
     @PostMapping("/save")
-    String saveAdmin(@RequestBody Admin admin){
-        return adminService.saveAdmin(admin);
+    String saveAdmin(@RequestBody Admin admin)
+    {
+        try {
+        User user = admin.getUser();
+        if(!userService.checkEmail(user)){
+            return "Cannot save, Email already Exist or not valid -> " + user.getEmail();
+        }else if(!userService.checkSSN(user)){
+            return "Cannot save, SSN already Exist or not valid -> " + user.getSsn();
+        }
+
+            return adminService.saveAdmin(admin);
+        }catch (Exception e){
+            return "Cannot save Admin -> " + e.toString();
+        }
     }
 
     @PostMapping("/approve_denied/{rental_id}/{approve_denied}")
@@ -45,7 +61,7 @@ public class AdminController {
     }
 
     @GetMapping("/")
-    List<Admin> findAllAdmin(){
-        return adminService.findAllAdmin();
+    List<User> findAllUser(){
+        return userService.findAllUser();
     }
 }

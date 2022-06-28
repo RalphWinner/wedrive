@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -23,7 +24,7 @@ public class User {
     @Column(name = "phone_number")
     private String phone_number;
     @Column(name = "createdAt")
-    private String createdAt;
+    private LocalDate createdAt;
     @Column(name = "password")
     private String password;
 
@@ -39,7 +40,7 @@ public class User {
 
     }
 
-    public User(long user_id, String first_name, String last_name, String email, String ssn, String phone_number, String createdAt, String password, Customer customer, Admin admin) {
+    public User(long user_id, String first_name, String last_name, String email, String ssn, String phone_number, LocalDate createdAt, String password, Customer customer, Admin admin) {
         this.user_id = user_id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -115,11 +116,11 @@ public class User {
         this.phone_number = phone_number;
     }
 
-    public String getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 }
