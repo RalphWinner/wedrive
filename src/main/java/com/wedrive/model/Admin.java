@@ -15,9 +15,6 @@ public class Admin {
     private Long admin_id;
     @Column(name = "username")
     private String username;
-    @Column(name = "password")
-    private String password;
-
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonBackReference
@@ -30,13 +27,11 @@ public class Admin {
     public Admin() {
     }
 
-    public Admin(Long admin_id, String username, String password, User user) {
+    public Admin(Long admin_id, String username, User user) {
         this.admin_id = admin_id;
         this.username = username;
-        this.password = password;
         this.user = user;
     }
-
     public Long getAdmin_id() {
         return admin_id;
     }
@@ -51,14 +46,6 @@ public class Admin {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public User getUser() {

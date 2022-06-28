@@ -24,6 +24,8 @@ public class User {
     private String phone_number;
     @Column(name = "createdAt")
     private String createdAt;
+    @Column(name = "password")
+    private String password;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonManagedReference
@@ -36,7 +38,8 @@ public class User {
     public User(){
 
     }
-    public User(long user_id, String first_name, String last_name, String email, String ssn, String phone_number, String createdAt) {
+
+    public User(long user_id, String first_name, String last_name, String email, String ssn, String phone_number, String createdAt, String password, Customer customer, Admin admin) {
         this.user_id = user_id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -44,8 +47,18 @@ public class User {
         this.ssn = ssn;
         this.phone_number = phone_number;
         this.createdAt = createdAt;
+        this.password = password;
+        this.customer = customer;
+        this.admin = admin;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
     public Customer getCustomer() {
         return customer;
     }

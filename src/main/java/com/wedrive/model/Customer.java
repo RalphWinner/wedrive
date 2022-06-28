@@ -22,7 +22,6 @@ public class Customer {
     @Column(name = "driver_licence")
     private String driver_licence;
 
-
     public Customer(){
 
     }
