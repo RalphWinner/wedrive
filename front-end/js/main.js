@@ -324,6 +324,7 @@ AOS.init({
 		addAdmin.on("submit", function (e) {
 			e.preventDefault()
 			const formData = formToObj(e.target)
+			console.log(formData)
 			$.ajax({
 				type: "POST",
 				url: "http://localhost:8080/api/v1/admin/save",
