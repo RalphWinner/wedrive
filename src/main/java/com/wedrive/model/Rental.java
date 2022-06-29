@@ -1,15 +1,10 @@
 package com.wedrive.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
-import java.util.*;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Entity
 @Table(name = "rental")
@@ -18,7 +13,7 @@ public class Rental {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long rental_id;
     @Column(name = "status")
-    private String status = "On Hold";
+    private String status;
     @Column(name = "start_date")
     private LocalDateTime  start_date;
     @Column(name = "end_date")
@@ -35,6 +30,11 @@ public class Rental {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "rental")
     @JsonManagedReference
     private Payment payment;
+
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "rental")
+    @JsonManagedReference
+    private Feedback feedback;
 
     public LocalDateTime getInsert_date() {
         return insert_date;

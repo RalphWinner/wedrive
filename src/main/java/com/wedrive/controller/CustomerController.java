@@ -1,11 +1,16 @@
 package com.wedrive.controller;
 
 import com.wedrive.model.Customer;
+import com.wedrive.model.Feedback;
+import com.wedrive.model.Rental;
 import com.wedrive.model.User;
 import com.wedrive.service.CustomerService;
+import com.wedrive.service.FeedbackService;
+import com.wedrive.service.RentalService;
 import com.wedrive.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -13,15 +18,37 @@ import java.util.List;
 public class CustomerController {
     private final CustomerService customerService;
     private final UserService userService;
+    private final RentalService rentalService;
+    private final FeedbackService feedbackService;
 
-    public CustomerController(CustomerService customerService, UserService userService) {
+    public CustomerController(CustomerService customerService, UserService userService, RentalService rentalService, FeedbackService feedbackService) {
         this.customerService = customerService;
         this.userService = userService;
+        this.rentalService = rentalService;
+        this.feedbackService = feedbackService;
     }
 
     @GetMapping("/")
     public List<Customer> findAllCustomer(){
         return customerService.findAllCustomer();
+    }
+    @PostMapping("/createfeedback/{rental_id}")
+    public String createFeedback(@RequestBody Feedback feedback, @PathVariable Long rental_id){
+        Rental rental;
+        try {
+            rental = rentalService.findRentalByID(rental_id);
+        }catch (Exception e){
+            return "Error, Rental not Found -> " + e.toString();
+        }
+
+        if(feedback.getMessage().equals("")){
+            return "Please, send a valid feedback";
+        }
+        feedback.setRental(rental);
+        feedback.setFeedbackDate(LocalDateTime.now());
+        feedbackService.saveFeedback(feedback);
+
+        return "Saved";
     }
 
     @PostMapping("/save")
@@ -31,10 +58,9 @@ public class CustomerController {
             User user =customer.getUser();
             if(!userService.checkEmail(user)){
                 return "Cannot save, Email already Exist or not valid -> " + user.getEmail();
-            }else if(!userService.checkSSN(user)){
-                return "Cannot save, SSN already Exist or not valid -> " + user.getSsn();
             }
-
+            user.setUser_type("Customer");
+            customer.setUser(user);
             return customerService.saveCustomer(customer);
         }catch (Exception e){
             return "Cannot save Customer -> " + e.toString();

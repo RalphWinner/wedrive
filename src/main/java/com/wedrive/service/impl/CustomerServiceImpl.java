@@ -6,6 +6,7 @@ import com.wedrive.repository.CustomerRepository;
 import com.wedrive.service.CustomerService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
     {
         User user = customer.getUser();
         user.setCustomer(customer);
+        user.setCreatedAt(LocalDateTime.now());
         customerRepository.save(customer);
         return "Saved";
     }

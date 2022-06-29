@@ -34,7 +34,7 @@ public class Car {
     @Column(name = "price_per_day")
     private float price_per_day;
     @Column(name = "is_rent")
-    private Boolean is_rent=false;
+    private Boolean is_rent;
     @Column(name = "image1")
     private String image1;
 
@@ -50,39 +50,7 @@ public class Car {
 
     }
 
-    public String getImage1() {
-        return image1;
-    }
-
-    public void setImage1(String image1) {
-        this.image1 = image1;
-    }
-
-    public Boolean getIs_rent() {
-        return is_rent;
-    }
-
-    public float getPrice_per_day() {
-        return price_per_day;
-    }
-
-    public void setPrice_per_day(float price_per_day) {
-        this.price_per_day = price_per_day;
-    }
-
-    public void setIs_rent(Boolean is_rent) {
-        this.is_rent = is_rent;
-    }
-
-    public Admin getInsertBy() {
-        return insertBy;
-    }
-
-    public void setInsertBy(Admin insertBy) {
-        this.insertBy = insertBy;
-    }
-
-    public Car(long car_id, String brand, String model, LocalDate last_service_date, int mileage, String color, String year, int max_capacity, int max_bag_allow, boolean is_rent) {
+    public Car(long car_id, String brand, String model, LocalDate last_service_date, int mileage, String color, String year, int max_capacity, int max_bag_allow, float price_per_day, Boolean is_rent, String image1, Admin insertBy, Set<Rental> rentals) {
         this.car_id = car_id;
         this.brand = brand;
         this.model = model;
@@ -92,14 +60,10 @@ public class Car {
         this.year = year;
         this.max_capacity = max_capacity;
         this.max_bag_allow = max_bag_allow;
+        this.price_per_day = price_per_day;
         this.is_rent = is_rent;
-    }
-
-    public Set<Rental> getRentals() {
-        return rentals;
-    }
-
-    public void setRentals(Set<Rental> rentals) {
+        this.image1 = image1;
+        this.insertBy = insertBy;
         this.rentals = rentals;
     }
 
@@ -109,14 +73,6 @@ public class Car {
 
     public void setCar_id(long car_id) {
         this.car_id = car_id;
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
     }
 
     public String getBrand() {
@@ -159,6 +115,14 @@ public class Car {
         this.color = color;
     }
 
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public int getMax_capacity() {
         return max_capacity;
     }
@@ -173,5 +137,45 @@ public class Car {
 
     public void setMax_bag_allow(int max_bag_allow) {
         this.max_bag_allow = max_bag_allow;
+    }
+
+    public float getPrice_per_day() {
+        return price_per_day;
+    }
+
+    public void setPrice_per_day(float price_per_day) {
+        this.price_per_day = price_per_day;
+    }
+
+    public Boolean getIs_rent() {
+        return is_rent;
+    }
+
+    public void setIs_rent(Boolean is_rent) {
+        this.is_rent = is_rent;
+    }
+
+    public String getImage1() {
+        return image1;
+    }
+
+    public void setImage1(String image1) {
+        this.image1 = image1;
+    }
+
+    public Admin getInsertBy() {
+        return insertBy;
+    }
+
+    public void setInsertBy(Admin insertBy) {
+        this.insertBy = insertBy;
+    }
+
+    public Set<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(Set<Rental> rentals) {
+        this.rentals = rentals;
     }
 }

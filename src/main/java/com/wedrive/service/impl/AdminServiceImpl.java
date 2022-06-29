@@ -7,6 +7,7 @@ import com.wedrive.service.AdminService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public String saveAdmin(Admin admin) {
         User user = admin.getUser();
-        user.setCreatedAt(LocalDate.now());
+        user.setCreatedAt(LocalDateTime.now());
         admin.setUser(user);
         adminRepository.save(admin);
         return "Saved";
@@ -37,5 +38,20 @@ public class AdminServiceImpl implements AdminService {
     {
         //findByID return a <optional> get() is to return the object
         return adminRepository.findById(id).get();
+    }
+
+    @Override
+    public Boolean checkSSN(Admin admin) {
+        String ssn = admin.getSsn();
+
+        if(ssn == null || ssn.length() != 9){
+            return false;
+        }
+        for(Admin tempAdmin: adminRepository.findAll()){
+            if(tempAdmin.getSsn().equals(ssn)){
+                return false;
+            }
+        }
+        return true;
     }
 }

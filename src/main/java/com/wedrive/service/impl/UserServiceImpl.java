@@ -32,21 +32,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean checkSSN(User user) {
-        String ssn = user.getSsn();
-
-        if(ssn == null || ssn.length() != 9){
-            return false;
-        }
-        for(User tempUser: userRepository.findAll()){
-            if(tempUser.getSsn().equals(ssn)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
     public List<User> findAllUser() {
         return userRepository.findAll();
     }

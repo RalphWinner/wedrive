@@ -13,8 +13,8 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long admin_id;
-    @Column(name = "username")
-    private String username;
+    @Column(name = "ssn")
+    private String ssn;
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonBackReference
@@ -27,25 +27,32 @@ public class Admin {
     public Admin() {
     }
 
-    public Admin(Long admin_id, String username, User user) {
+    public Admin(Long admin_id, User user) {
         this.admin_id = admin_id;
-        this.username = username;
         this.user = user;
     }
     public Long getAdmin_id() {
         return admin_id;
     }
 
+    public String getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
+    }
+
+    public Set<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(Set<Car> cars) {
+        this.cars = cars;
+    }
+
     public void setAdmin_id(Long admin_id) {
         this.admin_id = admin_id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public User getUser() {

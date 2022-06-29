@@ -1,10 +1,14 @@
 package com.wedrive.service.impl;
 
+import com.wedrive.model.Car;
 import com.wedrive.model.Rental;
 import com.wedrive.repository.RentalRepository;
 import com.wedrive.service.RentalService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -17,10 +21,9 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public String saveRental(Rental rental)
+    public Rental saveRental(Rental rental)
     {
-        rentalRepository.save(rental);
-        return "Saved";
+        return rentalRepository.save(rental);
     }
 
     @Override
@@ -31,6 +34,16 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public Rental findRentalByID(Long id) {
         return rentalRepository.findById(id).get();
+    }
+
+    @Override
+    public Boolean isCarRent(Car car) {
+        return car.getIs_rent();
+    }
+
+    @Override
+    public Boolean checkDateisGood(LocalDateTime startDate, LocalDateTime endDate) {
+        return ChronoUnit.DAYS.between(startDate, endDate) >= 1;
     }
 
 
