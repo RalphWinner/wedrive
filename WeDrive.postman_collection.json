@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "4803497c-b4d8-41ef-b046-6b7d0855b2cd",
+		"name": "WeDrive",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"ralphdeus\",\r\n    \"user\": {\r\n        \"password\": \"pass1234\",\r\n        \"email\": \"Ralph.Deus@miu.edu\",\r\n        \"first_name\": \"Ralph\",\r\n        \"last_name\": \"Deus\",\r\n        \"phone_number\": \"64552554\",\r\n        \"ssn\": \"878765654\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/admin/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": \"1000 N 4TH ST\",\r\n    \"driver_licence\": \"7687687\",\r\n    \"user\": {\r\n        \"password\": \"pass1234\",\r\n        \"email\": \"Ralph.Deus@mdiu.edu\",\r\n        \"first_name\": \"Ralph\",\r\n        \"last_name\": \"Deus\",\r\n        \"phone_number\": \"64552554\",\r\n        \"ssn\": \"878165654\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/customer/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customer",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Car",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/rd043481/OneDrive - Digicel Caribbean Ltd/Images/as.jpg"
+						},
+						{
+							"key": "car",
+							"value": "{ \"brand\": \"Peugeot\",\n    \"model\": \"Grand Vitara\",\n     \"last_service_date\": \"2022-06-06\"\n    \"year\": \"2021\" }",
+							"contentType": "application/json",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/car/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"car",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Rental",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": \"1000 N 4TH ST\",\r\n    \"driver_licence\": \"7687687\",\r\n    \"user\": {\r\n        \"password\": \"pass1234\",\r\n        \"email\": \"Ralph.Deus@mdiu.edu\",\r\n        \"first_name\": \"Ralph\",\r\n        \"last_name\": \"Deus\",\r\n        \"phone_number\": \"64552554\",\r\n        \"ssn\": \"878165654\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/customer/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customer",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Feedback",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"message\": \"je suis un test\",\r\n    \"driver_licence\": \"7687687\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/createfeedback/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"createfeedback",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"Ralph.Deus@miu.edu\",\r\n    \"password\": \"pass1d234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
