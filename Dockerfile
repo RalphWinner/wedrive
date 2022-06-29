@@ -12,8 +12,7 @@ RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM openjdk:18-jdk-alpine
 VOLUME /tmp
-RUN mkdir Upload
-COPY Upload Upload
+VOLUME /Upload
 ARG DEPENDENCY=/workspace/app/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF

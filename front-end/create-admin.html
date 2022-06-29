@@ -26,8 +26,8 @@
 
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
-    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="plugins/datatables/datatables.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -50,7 +50,7 @@
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="list-home" role="tabpanel"
                             aria-labelledby="list-home-list">
-                            <form id="addAdmin" action="#" class="mb-3 request-form ftco-animate bg-primary">
+                            <form id="addAdmin" class="mb-3 request-form ftco-animate bg-primary">
                                 <h2>Add admin</h2>
                                 <div class="d-flex">
                                     <div class="form-group mr-2">
@@ -88,17 +88,10 @@
                                             placeholder="Phone Name">
                                     </div>
                                     <div class="form-group ml-2">
-
-                                        <input type="number" max="1000000000" class="form-control" name="user.ssn"
+                                        <input type="number" max="1000000000" class="form-control" name="ssn"
                                             placeholder="123456789">
                                     </div>
                                 </div>
-
-                                <!-- 
-                                    
-                                    <
-                                  </div> -->
-
                                 <input type="submit" value="Add admin" class="btn btn-secondary py-2 px-2">
 
                             </form>
@@ -115,7 +108,7 @@
                         </div>
                         <div class="tab-pane fade" id="list-profile" role="tabpanel"
                             aria-labelledby="list-profile-list">
-                            <form id="addCustomer" action="#" class="request-form ftco-animate bg-primary">
+                            <form id="addCustomer" class="mb-3 request-form ftco-animate bg-primary">
                                 <h2>Add customer</h2>
                                 <div class="d-flex">
                                     <div class="form-group mr-2">
@@ -182,7 +175,7 @@
                         </div>
                         <div class="tab-pane fade" id="list-messages" role="tabpanel"
                             aria-labelledby="list-messages-list">
-                            <form id="addCar" action="#" class="request-form ftco-animate bg-primary"
+                            <form id="addCar" class="mb-3 request-form ftco-animate bg-primary"
                                 enctype="multipart/form-data">
                                 <h2>Add car</h2>
                                 <div class="d-flex">
@@ -219,10 +212,6 @@
 
                                         <input type="text" class="form-control" name="car.price_per_day"
                                             placeholder="Price Per Day">
-                                    </div>
-                                    <div class="form-group ml-2">
-
-                                        <input type="text" class="form-control" name="car.year" placeholder="Year">
                                     </div>
                                 </div>
                                 <div class="d-flex">

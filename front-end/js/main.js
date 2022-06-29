@@ -7,6 +7,7 @@ AOS.init({
 
 	"use strict";
 
+	const baseUrl = "http://localhost:8080/api/v1"
 	var isMobile = {
 		Android: function () {
 			return navigator.userAgent.match(/Android/i);
@@ -27,7 +28,12 @@ AOS.init({
 			return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
 		}
 	};
-
+	var queries = {};
+	$.each(document.location.search.substr(1).split('&'), function (c, q) {
+		var i = q.split('=');
+		if (i[0])
+			queries[i[0].toString()] = i[1].toString();
+	});
 
 	$(window).stellar({
 		responsive: true,
@@ -320,7 +326,18 @@ AOS.init({
 	});
 	$('#time_pick').timepicker();
 
-
+	function popUp(res) {
+		$("#myModal").find(".modal-title").empty()
+		$("#myModal").find(".modal-body").empty()
+		if (res === "Saved") {
+			$("#myModal").find(".modal-title").append(`<h5 class="text-success">Success!</h5>`)
+			$("#myModal").find(".modal-body").append(res)
+		} else {
+			$("#myModal").find(".modal-title").append(`<h5 class="text-danger">Error!</h5>`)
+			$("#myModal").find(".modal-body").append(res)
+		}
+		$("#myModal").modal("show");
+	}
 	var addAdmin = $('#addAdmin')
 
 	if (addAdmin != null) {
@@ -331,13 +348,14 @@ AOS.init({
 
 			$.ajax({
 				type: "POST",
-				url: "http://localhost:8080/api/v1/admin/save",
+				url: baseUrl + "/admin/save",
 				data: JSON.stringify(formData),
-				success: function () {
-
-					$("#myModal").modal("show");
-					$("#addAdmin")[0].reset();
-
+				success: function (response) {
+					popUp(response)
+					if (response === "Saved") {
+						$("#addAdmin")[0].reset();
+						getAllData(baseUrl + "/admin/", ".admin-table", ["user_id", "first_name", "last_name", "email"])
+					}
 				},
 				// dataType : "json",
 				contentType: "application/json; charset=utf-8"
@@ -353,7 +371,10 @@ AOS.init({
 			e.preventDefault()
 			const formData = formToObj(e.target)
 			var form = new FormData();
-			console.log($('#fileinput')[0].files[0])
+			if (typeof $('#fileinput')[0].files[0] == "undefined") {
+				popUp("Select image and fill the input values")
+				return
+			}
 			form.append("file", $('#fileinput')[0].files[0], $('#fileinput')[0].files[0].name);
 			form.append("car",
 				new Blob([JSON.stringify(formData.car)], {
@@ -362,7 +383,7 @@ AOS.init({
 			);
 
 			var settings = {
-				"url": "http://localhost:8080/api/v1/car/save/1/",
+				"url": baseUrl + "/car/save/1/",
 				"method": "POST",
 				"timeout": 0,
 				"processData": false,
@@ -372,8 +393,11 @@ AOS.init({
 			};
 
 			$.ajax(settings).done(function (response) {
-				$("#myModal").modal("show");
-				$("#addAdmin")[0].reset();
+				popUp(response)
+				if (response === "Saved") {
+					$("#addCar")[0].reset();
+					getAllData(baseUrl + "/car", ".car-table", ["car_id", "brand", "model", "color"])
+				}
 			});
 		})
 	}
@@ -384,13 +408,15 @@ AOS.init({
 			const formData = formToObj(e.target)
 			$.ajax({
 				type: "POST",
-				url: "http://localhost:8080/api/v1/customer/save",
+				url: baseUrl + "/customer/save",
 				data: JSON.stringify(formData),
 				success: function (result) {
-					$("#myModal").modal("show");
-					$("#addAdmin")[0].reset();
+					popUp(result)
+					if (response === "Saved") {
+						$("#addCustomer")[0].reset();
+						getAllData(baseUrl + "/customer/", ".customer-table", ["customer_id", "address", "driver_licence"])
+					}
 				},
-				dataType: "json",
 				contentType: "application/json; charset=utf-8"
 			});
 		})
@@ -436,10 +462,88 @@ AOS.init({
 			contentType: "application/json; charset=utf-8"
 		});
 	}
-	getAllData("http://localhost:8080/api/v1/admin/", ".admin-table", ["user_id", "first_name", "last_name", "email"])
-	getAllData("http://localhost:8080/api/v1/customer/", ".customer-table", ["customer_id", "address", "driver_licence"])
-	getAllData("http://localhost:8080/api/v1/car", ".car-table", ["car_id", "brand", "model"])
+	getAllData(baseUrl + "/admin/", ".admin-table", ["user_id", "first_name", "last_name", "email"])
+	getAllData(baseUrl + "/customer/", ".customer-table", ["customer_id", "address", "driver_licence"])
+	getAllData(baseUrl + "/car", ".car-table", ["car_id", "brand", "model", "color"])
+
+	const paginationWrapper = $(".block-27")
+
+	console.log(queries)
+	if (paginationWrapper != null) {
+		const paginationList = paginationWrapper.find("ul")
+		paginationList.empty()
+		$.ajax({
+			type: "GET",
+			url: baseUrl + "/car",
+			success: function (result) {
+				if (Array.isArray(result)) {
+					// $(".cars-list").empty()
+					if (queries.page) {
+						const from = (queries.page - 1) * 6
+						const to = from + 6
+						$.each(result.slice(from, to), function (index) {
+							const element = result[index]
 
 
+							$(".cars-list").append(`<div class="col-md-4">
+							<div class="car-wrap rounded ftco-animate">
+								<div class="img rounded d-flex align-items-end"
+									style="background-image: url(http://localhost:8080/Uploads/${element.image1});">
+								</div>
+								<div class="text">
+									<h2 class="mb-0"><a href="car-single.html">${element.model}</a></h2>
+									<div class="d-flex mb-3">
+										<span class="cat">${element.brand}</span>
+										<p class="price ml-auto">$${element.price_per_day} <span>/day</span></p>
+									</div>
+									<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a
+											href="car-single.html?id=${element.car_id}" class="btn btn-secondary py-2 ml-1">Details</a></p>
+								</div>
+							</div>
+						</div>`)
+						})
+					} else {
+						$.each(result.slice(0, 7), function (index) {
+							const element = result[index]
+
+
+							$(".cars-list").append(`<div class="col-md-4">
+							<div class="car-wrap rounded ftco-animate">
+								<div class="img rounded d-flex align-items-end"
+									style="background-image: url(http://localhost:8080/Uploads/${element.image1});">
+								</div>
+								<div class="text">
+									<h2 class="mb-0"><a href="car-single.html">${element.model}</a></h2>
+									<div class="d-flex mb-3">
+										<span class="cat">${element.brand}</span>
+										<p class="price ml-auto">$${element.price_per_day} <span>/day</span></p>
+									</div>
+									<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a
+											href="car-single.html?id=${element.car_id}" class="btn btn-secondary py-2 ml-1">Details</a></p>
+								</div>
+							</div>
+						</div>`)
+						})
+					}
+					contentWayPoint();
+					const pageSize = Math.round(result.length / 5)
+					let navs = ""
+					for (let index = 1; index <= pageSize; index++) {
+						if (queries.page && queries.page == index) {
+							navs += `<li class="active"><span>${index}</span></li>`
+						}
+						else {
+							navs += `<li><a href="?page=${index}">${index}</a></li>`
+						}
+
+					}
+					paginationList.append(navs)
+					paginationList.append(`<li><a href="#">&gt;</a></li>`)
+					paginationList.prepend(`<li><a href="#">&lt;</a></li>`)
+				}
+			},
+			contentType: "application/json; charset=utf-8"
+		});
+	}
 })(jQuery);
 

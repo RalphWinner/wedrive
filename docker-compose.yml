@@ -5,12 +5,9 @@ services:
       context: .
     platform: linux/x86_64
     volumes:
-      - type: volume
-        source: postgres-data
-        target: /var/lib/postgresql/data
-      - type: volume
-        source: upload-data
-        target: /Upload
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./upload-data:/Upload
+
     environment:
       #Database Connection
       SPRING_DATASOURCE_DRIVE_CLASS_NAME: "org.postgresql.Driver"
