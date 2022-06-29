@@ -339,29 +339,50 @@ AOS.init({
 	if (addCar != null) {
 		addCar.on("submit", function (e) {
 			e.preventDefault()
-			let formData = formToObj(e.target)
-			const fileInput = $("#fileinput").prop('files')
-			formData.file = fileInput[0];
-			console.log(formData)
-			$.ajax({
-				"url": "localhost:8080/api/v1/car/save/1/",
+			const formData = formToObj(e.target)
+			var form = new FormData();
+			console.log($('#fileinput')[0].files[0])
+			form.append("file", $('#fileinput')[0].files[0], $('#fileinput')[0].files[0].name);
+			form.append("car",
+				new Blob([JSON.stringify(formData.car)], {
+					type: 'application/json'
+				})
+			);
+
+			var settings = {
+				"url": "http://localhost:8080/api/v1/car/save/1/",
 				"method": "POST",
 				"timeout": 0,
 				"processData": false,
 				"mimeType": "multipart/form-data",
 				"contentType": false,
-				"data": formData
-			}).done(function (response) {
+				"data": form
+			};
+
+			$.ajax(settings).done(function (response) {
 				console.log(response);
 			});
+			// const formData = formToObj(e.target)
+			// var form = new FormData();
+			// console.log(new Blob([JSON.stringify(formData.car)], {
+			// 	type: "application/json"
+			// }))
+			// form.append("car", new Blob([JSON.stringify(formData.car)], {
+			// 	type: "application/json"
+			// }))
+			// form.append('file', $('#fileinput')[0].files[0]);
 			// $.ajax({
-			// 	type: "POST",
-			// 	url: "http://localhost:8080/api/v1/car/save",
-			// 	data: JSON.stringify(formData),
+
+			// 	url: "http://localhost:8080/api/v1/car/save/1",
+			// 	data: form,
+			// 	method: "POST",
+			// 	timeout: 600000,
+			// 	processData: false,
+			// 	mimeType: "multipart/form-data",
+			// 	contentType: false,
 			// 	success: function (result) {
 			// 		alert("Success!")
 			// 	},
-			// 	dataType: "json",
 			// 	contentType: "application/json; charset=utf-8"
 			// });
 		})

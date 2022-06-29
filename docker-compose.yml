@@ -1,10 +1,16 @@
 version: "3.8"
 services:
-
   app:
     build:
       context: .
     platform: linux/x86_64
+    volumes:
+      - type: volume
+        source: postgres-data
+        target: /var/lib/postgresql/data
+      - type: volume
+        source: upload-data
+        target: /Upload
     environment:
       #Database Connection
       SPRING_DATASOURCE_DRIVE_CLASS_NAME: "org.postgresql.Driver"
@@ -13,18 +19,13 @@ services:
       SPRING_DATASOURCE_PASSWORD: "Admin@1234"
 
       #JPA Config
-      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:  "org.hibernate.dialect.PostgreSQLDialect"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.PostgreSQLDialect"
       SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
       SPRING_JPA_SHOW_SQL: true
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
-
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      - type: volume
-        source: postgres-data
-        target: /var/lib/postgresql/data
     ports:
       - "8080:8080"
   db:
@@ -43,3 +44,4 @@ services:
       retries: 5
 volumes:
   postgres-data:
+  upload-data:
