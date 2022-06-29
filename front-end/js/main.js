@@ -329,9 +329,8 @@ AOS.init({
 				url: "http://localhost:8080/api/v1/admin/save",
 				data: JSON.stringify(formData),
 				success: function (result) {
-					alert("Success!")
+					alert(result)
 				},
-				dataType: "json",
 				contentType: "application/json; charset=utf-8"
 			});
 		})
@@ -340,12 +339,12 @@ AOS.init({
 	if (addCar != null) {
 		addCar.on("submit", function (e) {
 			e.preventDefault()
-			const formData = formToObj(e.target)
+			let formData = formToObj(e.target)
 			const fileInput = $("#fileinput").prop('files')
-			console.log(fileInput)
 			formData.file = fileInput[0];
+			console.log(formData)
 			$.ajax({
-				"url": "localhost:8080/api/v1/car/save/1",
+				"url": "localhost:8080/api/v1/car/save/1/",
 				"method": "POST",
 				"timeout": 0,
 				"processData": false,
@@ -403,7 +402,7 @@ AOS.init({
 					if (Object.hasOwnProperty.call(element, key)) {
 						const innerElement = element[key];
 						if (attrs.includes(key)) {
-							row += `<td>${innerElement||"Not given"}</td>`
+							row += `<td>${innerElement || "Not given"}</td>`
 						}
 					}
 				}
@@ -418,7 +417,7 @@ AOS.init({
 		type: "GET",
 		url: "http://localhost:8080/api/v1/admin/",
 		success: function (result) {
-			tableBuilder(".admin-table", result, ["admin_id", "username"])
+			tableBuilder(".admin-table", result, ["user_id", "first_name", "last_name", "email"])
 			$('.admin-table').DataTable();
 		},
 		contentType: "application/json; charset=utf-8"
@@ -428,7 +427,7 @@ AOS.init({
 		url: "http://localhost:8080/api/v1/customer/",
 		success: function (result) {
 			console.log(result)
-			tableBuilder(".customer-table", result, ["customer_id", "address","driver_licence"])
+			tableBuilder(".customer-table", result, ["customer_id", "address", "driver_licence"])
 			$('.customer-table').DataTable();
 		},
 		contentType: "application/json; charset=utf-8"
