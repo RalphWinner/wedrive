@@ -319,22 +319,40 @@ AOS.init({
 		'autoclose': true
 	});
 	$('#time_pick').timepicker();
+
+
 	var addAdmin = $('#addAdmin')
+
 	if (addAdmin != null) {
+
 		addAdmin.on("submit", function (e) {
 			e.preventDefault()
 			const formData = formToObj(e.target)
+
 			$.ajax({
 				type: "POST",
 				url: "http://localhost:8080/api/v1/admin/save",
 				data: JSON.stringify(formData),
+<<<<<<< HEAD
 				success: function (result) {
 					alert(result)
 				},
+=======
+				success: function(){
+
+					$("#myModal").modal("show");
+					$("#addAdmin")[0].reset();
+
+				},
+				// dataType : "json",
+>>>>>>> front-end
 				contentType: "application/json; charset=utf-8"
 			});
 		})
 	}
+
+
+
 	var addCar = $('#addCar')
 	if (addCar != null) {
 		addCar.on("submit", function (e) {
@@ -360,31 +378,9 @@ AOS.init({
 			};
 
 			$.ajax(settings).done(function (response) {
-				console.log(response);
+				$("#myModal").modal("show");
+				$("#addAdmin")[0].reset();
 			});
-			// const formData = formToObj(e.target)
-			// var form = new FormData();
-			// console.log(new Blob([JSON.stringify(formData.car)], {
-			// 	type: "application/json"
-			// }))
-			// form.append("car", new Blob([JSON.stringify(formData.car)], {
-			// 	type: "application/json"
-			// }))
-			// form.append('file', $('#fileinput')[0].files[0]);
-			// $.ajax({
-
-			// 	url: "http://localhost:8080/api/v1/car/save/1",
-			// 	data: form,
-			// 	method: "POST",
-			// 	timeout: 600000,
-			// 	processData: false,
-			// 	mimeType: "multipart/form-data",
-			// 	contentType: false,
-			// 	success: function (result) {
-			// 		alert("Success!")
-			// 	},
-			// 	contentType: "application/json; charset=utf-8"
-			// });
 		})
 	}
 	var addCustomer = $('#addCustomer')
@@ -397,7 +393,8 @@ AOS.init({
 				url: "http://localhost:8080/api/v1/customer/save",
 				data: JSON.stringify(formData),
 				success: function (result) {
-					alert("Success!")
+					$("#myModal").modal("show");
+					$("#addAdmin")[0].reset();
 				},
 				dataType: "json",
 				contentType: "application/json; charset=utf-8"
