@@ -34,10 +34,11 @@ public class AdminController {
         User user = admin.getUser();
         if(!userService.checkEmail(user)){
             return "Cannot save, Email already Exist or not valid -> " + user.getEmail();
-        }else if(!userService.checkSSN(user)){
-            return "Cannot save, SSN already Exist or not valid -> " + user.getSsn();
+        }else if(!adminService.checkSSN(admin)){
+            return "Cannot save, SSN already Exist or not valid -> " + admin.getSsn();
         }
-
+            user.setUser_type("Admin");
+            admin.setUser(user);
             return adminService.saveAdmin(admin);
         }catch (Exception e){
             return "Cannot save Admin -> " + e.toString();
@@ -52,7 +53,12 @@ public class AdminController {
 
         rental.setStatus("Approved");
         car.setIs_rent(approve_denied == 1);
-
+        if(approve_denied == 1){
+            rental.setStatus("Approve");
+        }else if (approve_denied == 0){
+            rental.setStatus("Denied");
+            car.setIs_rent(false);
+        }
         carService.updateCar(car);
         rentalService.saveRental(rental);
 

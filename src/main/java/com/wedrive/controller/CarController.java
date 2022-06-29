@@ -44,6 +44,7 @@ public class CarController {
     public String saveCar(@PathVariable Long admin_id
             ,@RequestPart("file") MultipartFile file, @RequestPart Car car)
     {
+
         Admin admin;
         try{
             admin = adminService.findAdminbyID(admin_id);
@@ -58,6 +59,7 @@ public class CarController {
         }
 
         car.setInsertBy(admin);
+        car.setIs_rent(false);
 
         // I save my car to get the auto generatedID
         Car newCar = carService.saveCar(car);

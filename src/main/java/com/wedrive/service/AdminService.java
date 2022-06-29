@@ -9,4 +9,5 @@ public interface AdminService {
     String saveAdmin(Admin admin);
     List<Admin> findAllAdmin();
     Admin findAdminbyID(Long id);
+    Boolean checkSSN(Admin admin);
 }

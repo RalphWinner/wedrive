@@ -5,6 +5,7 @@ import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -19,14 +20,14 @@ public class User {
     private String last_name;
     @Column(name = "email")
     private String email;
-    @Column(name = "ssn")
-    private String ssn;
     @Column(name = "phone_number")
     private String phone_number;
     @Column(name = "createdAt")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     @Column(name = "password")
     private String password;
+    @Column(name = "user_type")
+    private String user_type;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonManagedReference
@@ -40,16 +41,31 @@ public class User {
 
     }
 
-    public User(long user_id, String first_name, String last_name, String email, String ssn, String phone_number, LocalDate createdAt, String password, Customer customer, Admin admin) {
+    public User(long user_id, String first_name, String last_name, String email, String phone_number, LocalDateTime createdAt, String password, Customer customer, Admin admin) {
         this.user_id = user_id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
-        this.ssn = ssn;
         this.phone_number = phone_number;
         this.createdAt = createdAt;
         this.password = password;
         this.customer = customer;
+        this.admin = admin;
+    }
+
+    public String getUser_type() {
+        return user_type;
+    }
+
+    public void setUser_type(String user_type) {
+        this.user_type = user_type;
+    }
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
         this.admin = admin;
     }
 
@@ -100,14 +116,6 @@ public class User {
         this.email = email;
     }
 
-    public String getSsn() {
-        return ssn;
-    }
-
-    public void setSsn(String ssn) {
-        this.ssn = ssn;
-    }
-
     public String getPhone_number() {
         return phone_number;
     }
@@ -116,11 +124,11 @@ public class User {
         this.phone_number = phone_number;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 }
