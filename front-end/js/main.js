@@ -333,11 +333,22 @@ AOS.init({
 				type: "POST",
 				url: "http://localhost:8080/api/v1/admin/save",
 				data: JSON.stringify(formData),
-				success: function(){
-
+				success: function(response){
+					var mdb = $("#modal-body");
+					mdb.empty();
+					mdb.append(response);
 					$("#myModal").modal("show");
 					$("#addAdmin")[0].reset();
 				    
+				},
+				error : function($xhr,textStatus,errorThrown){
+					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+					// console.log("ERROR : ",  userData.message);
+					var mes = $("#modal-body");
+					mes.empty();
+					mes.append("Error : ",userData.error,"  ", "Status: ", userData.status);
+					$("#myModal").modal("show");
+					$("#addCar")[0].reset();
 				},
 				// dataType : "json",
 				contentType: "application/json; charset=utf-8"
@@ -358,10 +369,21 @@ AOS.init({
 				url: "http://localhost:8080/api/v1/car/save",
 				data: JSON.stringify(formData),
 				success: function(){
+					var mdb = $("#modal-body");
+					mdb.empty();
+					mdb.append(response);
 					$("#myModal").modal("show");
-					$("#addAdmin")[0].reset();
+					$("#addCar")[0].reset();
 				},
-				// dataType : "json",
+				error : function($xhr,textStatus,errorThrown){
+					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+					// console.log("ERROR : ",  userData.message);
+					var mes = $("#modal-body");
+					mes.empty();
+					mes.append("Error : ",userData.error,"  ", "Status: ", userData.status);
+					$("#myModal").modal("show");
+					$("#addCar")[0].reset();
+				},
 				contentType: "application/json; charset=utf-8"
 			  });
 		})
