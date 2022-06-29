@@ -333,7 +333,7 @@ AOS.init({
 				type: "POST",
 				url: "http://localhost:8080/api/v1/admin/save",
 				data: JSON.stringify(formData),
-				success: function(){
+				success: function () {
 
 					$("#myModal").modal("show");
 					$("#addAdmin")[0].reset();
@@ -425,25 +425,20 @@ AOS.init({
 			}
 		}
 	}
-	$.ajax({
-		type: "GET",
-		url: "http://localhost:8080/api/v1/admin/",
-		success: function (result) {
-			tableBuilder(".admin-table", result, ["user_id", "first_name", "last_name", "email"])
-			$('.admin-table').DataTable();
-		},
-		contentType: "application/json; charset=utf-8"
-	});
-	$.ajax({
-		type: "GET",
-		url: "http://localhost:8080/api/v1/customer/",
-		success: function (result) {
-			console.log(result)
-			tableBuilder(".customer-table", result, ["customer_id", "address", "driver_licence"])
-			$('.customer-table').DataTable();
-		},
-		contentType: "application/json; charset=utf-8"
-	});
+	function getAllData(url, table, attrs) {
+		$.ajax({
+			type: "GET",
+			url,
+			success: function (result) {
+				tableBuilder(table, result, attrs)
+				$(table).DataTable();
+			},
+			contentType: "application/json; charset=utf-8"
+		});
+	}
+	getAllData("http://localhost:8080/api/v1/admin/", ".admin-table", ["user_id", "first_name", "last_name", "email"])
+	getAllData("http://localhost:8080/api/v1/customer/", ".customer-table", ["customer_id", "address", "driver_licence"])
+	getAllData("http://localhost:8080/api/v1/car", ".car-table", ["car_id", "brand", "model"])
 
 
 })(jQuery);
