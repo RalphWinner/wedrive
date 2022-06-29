@@ -488,7 +488,7 @@ AOS.init({
 							$(".cars-list").append(`<div class="col-md-4">
 							<div class="car-wrap rounded ftco-animate">
 								<div class="img rounded d-flex align-items-end"
-									style="background-image: url(http://localhost:8080/Uploads/${element.image1});">
+									style="background-image: url(http://localhost:8080/Upload/${element.image1});">
 								</div>
 								<div class="text">
 									<h2 class="mb-0"><a href="car-single.html">${element.model}</a></h2>
@@ -510,7 +510,7 @@ AOS.init({
 							$(".cars-list").append(`<div class="col-md-4">
 							<div class="car-wrap rounded ftco-animate">
 								<div class="img rounded d-flex align-items-end"
-									style="background-image: url(http://localhost:8080/Uploads/${element.image1});">
+									style="background-image: url(http://localhost:8080/Upload/${element.image1});">
 								</div>
 								<div class="text">
 									<h2 class="mb-0"><a href="car-single.html">${element.model}</a></h2>
