@@ -333,11 +333,6 @@ AOS.init({
 				type: "POST",
 				url: "http://localhost:8080/api/v1/admin/save",
 				data: JSON.stringify(formData),
-<<<<<<< HEAD
-				success: function (result) {
-					alert(result)
-				},
-=======
 				success: function(){
 
 					$("#myModal").modal("show");
@@ -345,7 +340,6 @@ AOS.init({
 
 				},
 				// dataType : "json",
->>>>>>> front-end
 				contentType: "application/json; charset=utf-8"
 			});
 		})
