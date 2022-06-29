@@ -3,7 +3,11 @@ package com.wedrive.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.*;
+import javax.xml.bind.DatatypeConverter;
+import java.security.Key;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -73,8 +77,22 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String password)
+    {
+        byte[] keyData = DatatypeConverter.parseHexBinary("83014C46494E2E56414C45524546");
+
+        Key secretKey = new SecretKeySpec(keyData, "Blowfish");
+        byte[] ciphertext = null;
+        try {
+            Cipher cipher = Cipher.getInstance("Blowfish");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            ciphertext = cipher.doFinal(password.getBytes());
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+        String encrypted = DatatypeConverter.printHexBinary(ciphertext);
+        this.password = encrypted;
     }
     public Customer getCustomer() {
         return customer;
