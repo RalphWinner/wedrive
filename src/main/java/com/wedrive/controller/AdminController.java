@@ -39,6 +39,11 @@ public class AdminController {
         }
             user.setUser_type("Admin");
             admin.setUser(user);
+
+            SendEmail sendEmail = new SendEmail();
+            sendEmail.SendingEMail("Welcome to WeDrive MPP Project", "Your account have been created succesfully!!"
+                    , user.getEmail(), user.getFirst_name() + " " + user.getLast_name());
+
             return adminService.saveAdmin(admin);
         }catch (Exception e){
             return "Cannot save Admin -> " + e.toString();
@@ -62,6 +67,9 @@ public class AdminController {
         carService.updateCar(car);
         rentalService.saveRental(rental);
 
+        SendEmail sendEmail = new SendEmail();
+        sendEmail.SendingEMail("WeDrive MPP Project Rental Admin Approval", "Your rental have been "+ rental.getStatus() +"."
+                , rental.getCustomer().getUser().getEmail(), rental.getCustomer().getUser().getFirst_name() + " " + rental.getCustomer().getUser().getLast_name());
 
         return "Rental Approved";
     }

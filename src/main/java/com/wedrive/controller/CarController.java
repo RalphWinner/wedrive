@@ -31,7 +31,8 @@ public class CarController {
     }
 
     @GetMapping
-    public List<Car> findAllCar(){
+    public List<Car> findAllCar()
+    {
         return carService.findAllCar();
     }
 

@@ -57,6 +57,10 @@ public class RentalController {
         payment.setAmount();
         paymentService.savePayment(payment);
 
+        SendEmail sendEmail = new SendEmail();
+        sendEmail.SendingEMail("WeDrive MPP Project Rental Created", "Your rental have been created succesfully and you will receive an confirmation email when your rental is approved by an admin"
+                , savedRental.getCustomer().getUser().getEmail(), savedRental.getCustomer().getUser().getFirst_name() + " " + savedRental.getCustomer().getUser().getLast_name());
+
         return "Rental Saved";
     }
 
