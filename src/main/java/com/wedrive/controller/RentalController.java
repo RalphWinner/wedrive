@@ -60,10 +60,10 @@ public class RentalController {
         SendEmail sendEmail = new SendEmail();
         sendEmail.SendingEMail("WeDrive MPP Project Rental Created"
                 , "Your rental have been created succesfully and you will receive an confirmation email when your rental is approved by an admin " +
-                        "\n\n your Car brand , model, year: " + rental.getCar().getBrand() + ", " + rental.getCar().getModel() + ", " + rental.getCar().getYear() +
-                        "\n Starting date - Ending date: " + rental.getStart_date() + ", " + rental.getEnd_date() +
-                        "\n your billing amount: " + payment.getAmount() +
-                        "\n Payment method: " + payment.getPayment_method()
+                        "\n\n Your Car brand , model and year ==> " + rental.getCar().getBrand() + ", " + rental.getCar().getModel() + ", " + rental.getCar().getYear() +
+                        "\n Starting date - Ending date ==> " + rental.getStart_date().toLocalDate() + ", " + rental.getEnd_date().toLocalDate() +
+                        "\n your billing amount ==> " + payment.getAmount() +
+                        "\n Payment method ==> " + payment.getPayment_method()
                 , savedRental.getCustomer().getUser().getEmail(), savedRental.getCustomer().getUser().getFirst_name() + " " + savedRental.getCustomer().getUser().getLast_name());
 
         return "Rental Saved";

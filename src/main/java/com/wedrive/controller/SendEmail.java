@@ -37,9 +37,9 @@ public class SendEmail {
             );
             message.setSubject(subject);
             message.setText("Dear " + fullname + ", "
-                    + text
+                    + "\n\n " + text
                     + "\n\n Thanks, "
-                    + "\n\n WeDrive MPP project (2022)");
+                    + "\n WeDrive MPP project (2022)");
 
             Transport.send(message);
 
