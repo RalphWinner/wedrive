@@ -35,6 +35,11 @@ public class CarController {
         return carService.findAllCar();
     }
 
+    @GetMapping("/available")
+    public List<Car> findAllCarAvailable(){
+        return carService.findAllCarAvailable();
+    }
+
     @GetMapping("/{id}")
     public Optional<Car> findByID(@PathVariable("id") Long id) {
         return carService.findByID(id);

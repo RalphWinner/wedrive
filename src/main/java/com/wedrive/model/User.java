@@ -79,6 +79,11 @@ public class User {
 
     public void setPassword(String password)
     {
+        this.password = cryptPassword(password);
+    }
+
+    public String cryptPassword(String password)
+    {
         byte[] keyData = DatatypeConverter.parseHexBinary("83014C46494E2E56414C45524546");
 
         Key secretKey = new SecretKeySpec(keyData, "Blowfish");
@@ -92,7 +97,7 @@ public class User {
             System.out.println(e);
         }
         String encrypted = DatatypeConverter.printHexBinary(ciphertext);
-        this.password = encrypted;
+        return encrypted;
     }
     public Customer getCustomer() {
         return customer;

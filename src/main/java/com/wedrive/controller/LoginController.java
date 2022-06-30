@@ -23,6 +23,7 @@ public class LoginController {
 		try {
 			String email = user.getEmail();
 			String password = user.getPassword();
+			password = user.cryptPassword(password);
 			return UserExistType(email, password);
 		}catch (Exception e){
 			return "Cannot Login in -> " + e.toString();
