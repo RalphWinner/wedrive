@@ -357,6 +357,15 @@ AOS.init({
 						getAllData(baseUrl + "/admin/", ".admin-table", ["user_id", "first_name", "last_name", "email"])
 					}
 				},
+				error: function ($xhr, textStatus, errorThrown) {
+					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+					// console.log("ERROR : ",  userData.message);
+					var mes = $("#modal-body");
+					mes.empty();
+					mes.append("Error : ", userData.error, "  ", "Status: ", userData.status);
+					$("#myModal").modal("show");
+					$("#addCar")[0].reset();
+				},
 				// dataType : "json",
 				contentType: "application/json; charset=utf-8"
 			});
@@ -416,6 +425,15 @@ AOS.init({
 						$("#addCustomer")[0].reset();
 						getAllData(baseUrl + "/customer/", ".customer-table", ["customer_id", "address", "driver_licence"])
 					}
+				},
+				error: function ($xhr, textStatus, errorThrown) {
+					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+					// console.log("ERROR : ",  userData.message);
+					var mes = $("#modal-body");
+					mes.empty();
+					mes.append("Error : ", userData.error, "  ", "Status: ", userData.status);
+					$("#myModal").modal("show");
+					$("#addCar")[0].reset();
 				},
 				contentType: "application/json; charset=utf-8"
 			});
