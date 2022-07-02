@@ -575,6 +575,8 @@ AOS.init({
 					$("#max_capacity").text(result.max_capacity)
 					$("#max_bag_allow").text(result.max_bag_allow)
 					$("#last_service_date").text(result.last_service_date || "Not shown")
+					$("#year").text(result.year || "Not shown")
+					$("#price_per_day").text(result.price_per_day + "$")
 				}
 			}
 		})
@@ -596,8 +598,8 @@ AOS.init({
 						$.each(result.slice(from, to), function (index) {
 							const element = result[index]
 
-
-							$(".cars-list").append(`<div class="col-md-4">
+							if (!element.is_rent)
+								$(".cars-list").append(`<div class="col-md-4">
 							<div class="car-wrap rounded ftco-animate">
 								<div class="img rounded d-flex align-items-end"
 									style="background-image: url(http://localhost:8080/Upload/${element.image1});">
@@ -618,7 +620,7 @@ AOS.init({
 						$.each(result.slice(0, 7), function (index) {
 							const element = result[index]
 
-
+							if (!element.is_rent)
 							$(".cars-list").append(`<div class="col-md-4">
 							<div class="car-wrap rounded ftco-animate">
 								<div class="img rounded d-flex align-items-end"
