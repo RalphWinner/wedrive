@@ -209,7 +209,7 @@ AOS.init({
 				$('.number').each(function () {
 					var $this = $(this),
 						num = $this.data('number');
-					console.log(num);
+
 					$this.animateNumber(
 						{
 							number: num,
@@ -325,7 +325,6 @@ AOS.init({
 		'autoclose': true
 	});
 	$('#time_pick').timepicker();
-
 	function popUp(res) {
 		$("#myModal").find(".modal-title").empty()
 		$("#myModal").find(".modal-body").empty()
@@ -440,6 +439,80 @@ AOS.init({
 		})
 	}
 
+	var loginButton = $('a[href="login.html"]')
+	if (loginButton != null && localStorage.getItem("role") != null) {
+		loginButton.text("Logout")
+		loginButton.click(function () {
+			localStorage.removeItem("role")
+			window.location.assign("/")
+			return false;
+		})
+	}
+	var login = $('#login')
+	if (login != null) {
+
+		login.on("submit", function (e) {
+			e.preventDefault()
+			const formData = formToObj(e.target)
+
+			$.ajax({
+				type: "POST",
+				url: baseUrl + "/login",
+				data: JSON.stringify(formData),
+				success: function (response) {
+					popUp(response)
+					if (response === "Customer") {
+						localStorage.setItem("role", "Customer")
+						window.location.assign('/')
+					} else if (response === "Admin") {
+						localStorage.setItem("role", "Admin")
+						window.location.assign('/admin.html')
+					}
+				},
+				error: function ($xhr, textStatus, errorThrown) {
+					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+					// console.log("ERROR : ",  userData.message);
+					var mes = $("#modal-body");
+					mes.empty();
+					mes.append("Error : ", userData.error, "  ", "Status: ", userData.status);
+					$("#myModal").modal("show");
+					$("#login")[0].reset();
+				},
+				// dataType : "json",
+				contentType: "application/json; charset=utf-8"
+			});
+		})
+	}
+
+	var register = $('#register')
+	if (register != null) {
+
+		register.on("submit", function (e) {
+			e.preventDefault()
+			const formData = formToObj(e.target)
+
+			$.ajax({
+				type: "POST",
+				url: baseUrl + "/customer/save",
+				data: JSON.stringify(formData),
+				success: function (response) {
+					popUp(response)
+					window.location.assign('/login.html')
+				},
+				error: function ($xhr, textStatus, errorThrown) {
+					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+					// console.log("ERROR : ",  userData.message);
+					var mes = $("#modal-body");
+					mes.empty();
+					mes.append("Error : ", userData.error, "  ", "Status: ", userData.status);
+					$("#myModal").modal("show");
+					$("#login")[0].reset();
+				},
+				// dataType : "json",
+				contentType: "application/json; charset=utf-8"
+			});
+		})
+	}
 
 	function tableBuilder(table, data, attrs) {
 		const tableWrapper = $(table)
@@ -475,7 +548,9 @@ AOS.init({
 			url,
 			success: function (result) {
 				tableBuilder(table, result, attrs)
-				$(table).DataTable();
+				if ($(table) != null && $(table).DataTable != undefined) {
+					$(table).DataTable();
+				}
 			},
 			contentType: "application/json; charset=utf-8"
 		});
@@ -484,9 +559,28 @@ AOS.init({
 	getAllData(baseUrl + "/customer/", ".customer-table", ["customer_id", "address", "driver_licence"])
 	getAllData(baseUrl + "/car", ".car-table", ["car_id", "brand", "model", "color"])
 
-	const paginationWrapper = $(".block-27")
 
-	console.log(queries)
+	var carDetails = $("ftco-car-details")
+	if (carDetails != null) {
+		$.ajax({
+			type: "GET",
+			url: baseUrl + "/car/" + queries.id,
+			success: function (result) {
+				const mainDetails = $(".car-details")
+				if (mainDetails != null) {
+					mainDetails.find("div.img.rounded").css('background-image', 'url(/Upload/' + result.image1 + ')')
+					mainDetails.find(".text .subheading").text(result.brand)
+					mainDetails.find(".text h2").text(result.model)
+					$("#mileage").text(result.mileage)
+					$("#max_capacity").text(result.max_capacity)
+					$("#max_bag_allow").text(result.max_bag_allow)
+					$("#last_service_date").text(result.last_service_date || "Not shown")
+				}
+			}
+		})
+	}
+
+	const paginationWrapper = $(".block-27")
 	if (paginationWrapper != null) {
 		const paginationList = paginationWrapper.find("ul")
 		paginationList.empty()
@@ -553,7 +647,6 @@ AOS.init({
 						else {
 							navs += `<li><a href="?page=${index}">${index}</a></li>`
 						}
-
 					}
 					paginationList.append(navs)
 					paginationList.append(`<li><a href="#">&gt;</a></li>`)
