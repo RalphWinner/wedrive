@@ -87,9 +87,23 @@ public class CarController {
         return "Saved";
     }
 
-    @PutMapping
-    public void updateCar(@RequestBody Car car) {
+    @PutMapping("/update/{admin_id}")
+    public String updateCar(@RequestBody Car car, @PathVariable Long admin_id)
+    {
+        Admin admin;
+        try{
+            admin = adminService.findAdminbyID(admin_id);
+        }catch (Exception exception){
+            return "Cannot update, Admin not exist -> " + exception.toString();
+        }
+
+        if(!carService.isCarExist(car.getCar_id())){
+            return "Cannot update, Car not exist -> " + car.getCar_id();
+        }
+
         carService.updateCar(car);
+
+        return "updated";
     }
 
     @DeleteMapping("/{id}")

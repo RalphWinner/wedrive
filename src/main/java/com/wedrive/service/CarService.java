@@ -12,6 +12,7 @@ public interface CarService {
     Optional<Car> findByID(Long id);
     List<Car> findAllCarAvailable();
     Car saveCar(Car car);
-    void updateCar(Car car);
+    Car updateCar(Car car);
+    Boolean isCarExist(Long id);
     void deleteCar(Long id);
 }

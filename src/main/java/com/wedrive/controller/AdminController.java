@@ -27,6 +27,29 @@ public class AdminController {
         this.userService = userService;
     }
 
+    String HelloWorld()
+    {
+        return "Hello to the WORLD!";
+    }
+    @PutMapping("/update")
+    String editAdmin(@RequestBody Admin admin)
+    {
+        try {
+            if(admin.getAdmin_id() == null){
+                return "Cannot update, please provide an Admin ID";
+            }else if(!adminService.isAdminExist(admin.getAdmin_id())){
+                return "Cannot update, Admin ID not exist";
+            }
+
+            User user = admin.getUser();
+            user.setUser_type("Admin");
+
+            return adminService.saveAdmin(admin);
+        }catch (Exception e){
+            return "Cannot update Admin -> " + e.toString();
+        }
+    }
+
     @PostMapping("/save")
     String saveAdmin(@RequestBody Admin admin)
     {
@@ -75,7 +98,7 @@ public class AdminController {
     }
 
     @GetMapping("/")
-    List<User> findAllUser(){
-        return userService.findAllUser();
+    List<Admin> findAllAdmin(){
+        return adminService.findAllAdmin();
     }
 }

@@ -47,8 +47,13 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void updateCar(Car car) {
-        carRepository.save(car);
+    public Car updateCar(Car car) {
+        return carRepository.save(car);
+    }
+
+    @Override
+    public Boolean isCarExist(Long id) {
+        return carRepository.existsById(id);
     }
 
     @Override
