@@ -61,13 +61,18 @@ public class CustomerController {
             }
             user.setUser_type("Customer");
             customer.setUser(user);
+
+            SendEmail sendEmail = new SendEmail();
+            sendEmail.SendingEMail("Welcome to WeDrive MPP Project", "Your account have been created succesfully!!"
+                    , user.getEmail(), user.getFirst_name() + " " + user.getLast_name());
+
             return customerService.saveCustomer(customer);
         }catch (Exception e){
             return "Cannot save Customer -> " + e.toString();
         }
     }
 
-    @PutMapping("")
+    @PutMapping("/update")
     public void updateCustomer(@RequestBody Customer customer) {
         customerService.updateCustomer(customer);
     }

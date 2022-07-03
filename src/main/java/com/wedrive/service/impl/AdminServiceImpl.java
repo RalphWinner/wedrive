@@ -4,6 +4,7 @@ import com.wedrive.model.Admin;
 import com.wedrive.model.User;
 import com.wedrive.repository.AdminRepository;
 import com.wedrive.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ import java.util.List;
 @Service
 public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
-
+    @Autowired
     public AdminServiceImpl(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
     }
@@ -25,6 +26,11 @@ public class AdminServiceImpl implements AdminService {
         admin.setUser(user);
         adminRepository.save(admin);
         return "Saved";
+    }
+
+    @Override
+    public String editAdmin(Long ID) {
+        return null;
     }
 
     @Override
@@ -53,5 +59,10 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean isAdminExist(Long admin_id) {
+        return adminRepository.existsById(admin_id);
     }
 }

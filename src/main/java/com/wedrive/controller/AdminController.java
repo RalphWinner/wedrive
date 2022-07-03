@@ -27,6 +27,29 @@ public class AdminController {
         this.userService = userService;
     }
 
+    String HelloWorld()
+    {
+        return "Hello to the WORLD!";
+    }
+    @PutMapping("/update")
+    String editAdmin(@RequestBody Admin admin)
+    {
+        try {
+            if(admin.getAdmin_id() == null){
+                return "Cannot update, please provide an Admin ID";
+            }else if(!adminService.isAdminExist(admin.getAdmin_id())){
+                return "Cannot update, Admin ID not exist";
+            }
+
+            User user = admin.getUser();
+            user.setUser_type("Admin");
+
+            return adminService.saveAdmin(admin);
+        }catch (Exception e){
+            return "Cannot update Admin -> " + e.toString();
+        }
+    }
+
     @PostMapping("/save")
     String saveAdmin(@RequestBody Admin admin)
     {
@@ -39,6 +62,11 @@ public class AdminController {
         }
             user.setUser_type("Admin");
             admin.setUser(user);
+
+            SendEmail sendEmail = new SendEmail();
+            sendEmail.SendingEMail("Welcome to WeDrive MPP Project", "Your account have been created succesfully!!"
+                    , user.getEmail(), user.getFirst_name() + " " + user.getLast_name());
+
             return adminService.saveAdmin(admin);
         }catch (Exception e){
             return "Cannot save Admin -> " + e.toString();
@@ -62,12 +90,15 @@ public class AdminController {
         carService.updateCar(car);
         rentalService.saveRental(rental);
 
+        SendEmail sendEmail = new SendEmail();
+        sendEmail.SendingEMail("WeDrive MPP Project Rental Admin Approval", "Your rental have been "+ rental.getStatus() +"."
+                , rental.getCustomer().getUser().getEmail(), rental.getCustomer().getUser().getFirst_name() + " " + rental.getCustomer().getUser().getLast_name());
 
         return "Rental Approved";
     }
 
     @GetMapping("/")
-    List<User> findAllUser(){
-        return userService.findAllUser();
+    List<Admin> findAllAdmin(){
+        return adminService.findAllAdmin();
     }
 }

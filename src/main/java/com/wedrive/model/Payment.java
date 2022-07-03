@@ -9,13 +9,14 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @Entity
 @Table(name = "payment")
 public class Payment {
+    private static final float TAXE = 0.092f;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long payment_id;
 
     @Column(name = "amount")
     private float amount;
-    @Column(name = "payment_method")
+    @Column(name = "payment_transaction_number")
     private String payment_method;
     @OneToOne
     @JoinColumn(name = "rental_id")
@@ -53,6 +54,7 @@ public class Payment {
         try{
             long noOfDaysBetween = ChronoUnit.DAYS.between(rental.getStart_date(), rental.getEnd_date());
             this.amount = this.rental.getCar().getPrice_per_day()*noOfDaysBetween;
+            this.amount*=(1 + TAXE);
         }catch (Exception e){
             this.amount = 0;
         }

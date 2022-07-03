@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.wedrive.repository.CarRepository;
 import com.wedrive.service.CarService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +29,15 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car findBycolor(String color) {
-        return null;
+    public List<Car> findAllCarAvailable()
+    {
+        List<Car> carList = null;
+        for (Car car: carRepository.findAll()){
+            if(!car.getIs_rent()){
+                carList.add(car);
+            }
+        }
+        return carList;
     }
 
     @Override
@@ -39,8 +47,13 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void updateCar(Car car) {
-        carRepository.save(car);
+    public Car updateCar(Car car) {
+        return carRepository.save(car);
+    }
+
+    @Override
+    public Boolean isCarExist(Long id) {
+        return carRepository.existsById(id);
     }
 
     @Override

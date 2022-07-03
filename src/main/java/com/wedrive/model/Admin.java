@@ -27,10 +27,12 @@ public class Admin {
     public Admin() {
     }
 
-    public Admin(Long admin_id, User user) {
+    public Admin(Long admin_id, String ssn, User user) {
         this.admin_id = admin_id;
+        this.ssn = ssn;
         this.user = user;
     }
+
     public Long getAdmin_id() {
         return admin_id;
     }
