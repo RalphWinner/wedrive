@@ -39,9 +39,9 @@ public class LoginController {
 		for (User tempuser: userService.findAllUser()){
 			if(tempuser.getEmail().equals(email) && tempuser.getPassword().equals(password)){
 				if(tempuser.getUser_type().equals("Admin")){
-					return "Admin."+adminService.findAdminbyUserID(tempuser).getAdmin_id();
+					return "Admin."+adminService.findAdminbyUserID(tempuser).getAdmin_id()+"."+tempuser.getFirst_name() + " " + tempuser.getLast_name();
 				}else{
-					return "Customer."+customerService.findCustomerbyUserID(tempuser).getCustomer_id();
+					return "Customer."+customerService.findCustomerbyUserID(tempuser).getCustomer_id()+"."+tempuser.getFirst_name() + " " + tempuser.getLast_name();
 				}
 			}
 		}

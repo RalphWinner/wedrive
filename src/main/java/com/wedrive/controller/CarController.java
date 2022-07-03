@@ -88,7 +88,7 @@ public class CarController {
     }
 
     @PutMapping("/update/{admin_id}")
-    public String updateCar(@RequestBody Car car, @PathVariable Long admin_id)
+    public String updateCar(@RequestBody Car Newcar, @PathVariable Long admin_id)
     {
         Admin admin;
         try{
@@ -97,11 +97,16 @@ public class CarController {
             return "Cannot update, Admin not exist -> " + exception.toString();
         }
 
-        if(!carService.isCarExist(car.getCar_id())){
-            return "Cannot update, Car not exist -> " + car.getCar_id();
+        if(!carService.isCarExist(Newcar.getCar_id())){
+            return "Cannot update, Car not exist -> " + Newcar.getCar_id();
         }
+        Car OldCar = carService.findByID(Newcar.getCar_id()).get();
 
-        carService.updateCar(car);
+        Newcar.setInsertBy(admin);
+        Newcar.setIs_rent(OldCar.getIs_rent());
+        Newcar.setImage1(OldCar.getImage1());
+
+        carService.updateCar(Newcar);
 
         return "updated";
     }
