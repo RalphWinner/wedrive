@@ -50,7 +50,6 @@ public class CarController {
     public String saveCar(@PathVariable Long admin_id
             ,@RequestPart("file") MultipartFile file, @RequestPart Car car)
     {
-
         Admin admin;
         try{
             admin = adminService.findAdminbyID(admin_id);

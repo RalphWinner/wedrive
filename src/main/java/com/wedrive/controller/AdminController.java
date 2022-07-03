@@ -26,11 +26,6 @@ public class AdminController {
         this.carService = carService;
         this.userService = userService;
     }
-
-    String HelloWorld()
-    {
-        return "Hello to the WORLD!";
-    }
     @PutMapping("/update")
     String editAdmin(@RequestBody Admin admin)
     {
@@ -55,6 +50,7 @@ public class AdminController {
     {
         try {
         User user = admin.getUser();
+
         if(!userService.checkEmail(user)){
             return "Cannot save, Email already Exist or not valid -> " + user.getEmail();
         }else if(!adminService.checkSSN(admin)){
