@@ -1,5 +1,8 @@
 package com.wedrive.controller;
 
+import com.wedrive.model.Customer;
+import com.wedrive.service.AdminService;
+import com.wedrive.service.CustomerService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +16,9 @@ import com.wedrive.service.UserService;
 public class LoginController {
 
     private UserService userService;
-    
-    public LoginController(UserService userService) {
-    	this.userService = userService;
-    }
+    private AdminService adminService;
+    private CustomerService customerService;
+
 
 	@PostMapping(value = "/login")
 	public String login(@RequestBody User user) {
@@ -34,7 +36,11 @@ public class LoginController {
 	{
 		for (User tempuser: userService.findAllUser()){
 			if(tempuser.getEmail().equals(email) && tempuser.getPassword().equals(password)){
-				return tempuser.getUser_type();
+				if(tempuser.getUser_type() == "Admin"){
+					return "Admin";
+				}else{
+					return "Customer.1";
+				}
 			}
 		}
 		return "Credentials not Correct";
