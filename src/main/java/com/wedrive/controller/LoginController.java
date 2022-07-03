@@ -37,9 +37,9 @@ public class LoginController {
 		for (User tempuser: userService.findAllUser()){
 			if(tempuser.getEmail().equals(email) && tempuser.getPassword().equals(password)){
 				if(tempuser.getUser_type() == "Admin"){
-					return "Admin";
+					return "Admin."+tempuser.getUser_id();
 				}else{
-					return "Customer.1";
+					return "Customer."+tempuser.getUser_id();
 				}
 			}
 		}
