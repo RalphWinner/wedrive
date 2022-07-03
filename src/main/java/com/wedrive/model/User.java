@@ -10,6 +10,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -153,5 +154,18 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return user_id == user.user_id && Objects.equals(first_name, user.first_name) && Objects.equals(last_name, user.last_name) && Objects.equals(email, user.email) && Objects.equals(phone_number, user.phone_number) && Objects.equals(createdAt, user.createdAt) && Objects.equals(password, user.password) && Objects.equals(user_type, user.user_type) && Objects.equals(customer, user.customer) && Objects.equals(admin, user.admin);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user_id, first_name, last_name, email, phone_number, createdAt, password, user_type, customer, admin);
     }
 }

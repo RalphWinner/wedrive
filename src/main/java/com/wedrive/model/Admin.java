@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -17,7 +18,7 @@ public class Admin {
     private String ssn;
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+//    @JsonBackReference
     private User user;
 
     @JsonIgnore
@@ -63,5 +64,18 @@ public class Admin {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Admin admin = (Admin) o;
+        return Objects.equals(admin_id, admin.admin_id) && Objects.equals(ssn, admin.ssn) && Objects.equals(user, admin.user) && Objects.equals(cars, admin.cars);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(admin_id, ssn, user, cars);
     }
 }
