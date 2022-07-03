@@ -7,6 +7,7 @@ AOS.init({
 
 	"use strict";
 
+	const baseUrl = "http://localhost:8080/api/v1"
 	var isMobile = {
 		Android: function () {
 			return navigator.userAgent.match(/Android/i);
@@ -27,7 +28,12 @@ AOS.init({
 			return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
 		}
 	};
-
+	var queries = {};
+	$.each(document.location.search.substr(1).split('&'), function (c, q) {
+		var i = q.split('=');
+		if (i[0])
+			queries[i[0].toString()] = i[1].toString();
+	});
 
 	$(window).stellar({
 		responsive: true,
@@ -203,7 +209,7 @@ AOS.init({
 				$('.number').each(function () {
 					var $this = $(this),
 						num = $this.data('number');
-					console.log(num);
+
 					$this.animateNumber(
 						{
 							number: num,
@@ -319,40 +325,321 @@ AOS.init({
 		'autoclose': true
 	});
 	$('#time_pick').timepicker();
+	function popUp(res) {
+		$("#myModal").find(".modal-title").empty()
+		$("#myModal").find(".modal-body").empty()
+		if (res === "Saved") {
+			$("#myModal").find(".modal-title").append(`<h5 class="text-success">Success!</h5>`)
+			$("#myModal").find(".modal-body").append(res)
+		} else {
+			$("#myModal").find(".modal-title").append(`<h5 class="text-danger">Error!</h5>`)
+			$("#myModal").find(".modal-body").append(res)
+		}
+		$("#myModal").modal("show");
+	}
 	var addAdmin = $('#addAdmin')
+
 	if (addAdmin != null) {
+
 		addAdmin.on("submit", function (e) {
 			e.preventDefault()
 			const formData = formToObj(e.target)
+
 			$.ajax({
 				type: "POST",
-				url: "http://localhost:8080/api/v1/admin/save",
+				url: baseUrl + "/admin/save",
 				data: JSON.stringify(formData),
-				success: function(result){
-					alert("Success!")
+				success: function (response) {
+					popUp(response)
+					if (response === "Saved") {
+						$("#addAdmin")[0].reset();
+						getAllData(baseUrl + "/admin/", ".admin-table", ["user_id", "first_name", "last_name", "email"])
+					}
 				},
-				dataType : "json",
+				error: function ($xhr, textStatus, errorThrown) {
+					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+					// console.log("ERROR : ",  userData.message);
+					var mes = $("#modal-body");
+					mes.empty();
+					mes.append("Error : ", userData.error, "  ", "Status: ", userData.status);
+					$("#myModal").modal("show");
+					$("#addCar")[0].reset();
+				},
+				// dataType : "json",
 				contentType: "application/json; charset=utf-8"
-			  });
+			});
 		})
 	}
+
+
+
 	var addCar = $('#addCar')
 	if (addCar != null) {
 		addCar.on("submit", function (e) {
 			e.preventDefault()
 			const formData = formToObj(e.target)
+			var form = new FormData();
+			if (typeof $('#fileinput')[0].files[0] == "undefined") {
+				popUp("Select image and fill the input values")
+				return
+			}
+			form.append("file", $('#fileinput')[0].files[0], $('#fileinput')[0].files[0].name);
+			form.append("car",
+				new Blob([JSON.stringify(formData.car)], {
+					type: 'application/json'
+				})
+			);
+
+			var settings = {
+				"url": baseUrl + "/car/save/1/",
+				"method": "POST",
+				"timeout": 0,
+				"processData": false,
+				"mimeType": "multipart/form-data",
+				"contentType": false,
+				"data": form
+			};
+
+			$.ajax(settings).done(function (response) {
+				popUp(response)
+				if (response === "Saved") {
+					$("#addCar")[0].reset();
+					getAllData(baseUrl + "/car", ".car-table", ["car_id", "brand", "model", "color"])
+				}
+			});
+		})
+	}
+	var addCustomer = $('#addCustomer')
+	if (addCustomer != null) {
+		addCustomer.on("submit", function (e) {
+			e.preventDefault()
+			const formData = formToObj(e.target)
 			$.ajax({
 				type: "POST",
-				url: "http://localhost:8080/api/v1/car/save",
+				url: baseUrl + "/customer/save",
 				data: JSON.stringify(formData),
-				success: function(result){
-					alert("Success!")
+				success: function (result) {
+					popUp(result)
+					if (response === "Saved") {
+						$("#addCustomer")[0].reset();
+						getAllData(baseUrl + "/customer/", ".customer-table", ["customer_id", "address", "driver_licence"])
+					}
 				},
-				dataType : "json",
+				error: function ($xhr, textStatus, errorThrown) {
+					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+					// console.log("ERROR : ",  userData.message);
+					var mes = $("#modal-body");
+					mes.empty();
+					mes.append("Error : ", userData.error, "  ", "Status: ", userData.status);
+					$("#myModal").modal("show");
+					$("#addCar")[0].reset();
+				},
 				contentType: "application/json; charset=utf-8"
-			  });
+			});
 		})
 	}
 
+	var loginButton = $('a[href="login.html"]')
+	if (loginButton != null && localStorage.getItem("role") != null) {
+		loginButton.text("Logout")
+		loginButton.click(function () {
+			localStorage.removeItem("role")
+			window.location.assign("/")
+			return false;
+		})
+	}
+	var login = $('#login')
+	if (login != null) {
+
+		login.on("submit", function (e) {
+			e.preventDefault()
+			const formData = formToObj(e.target)
+
+			$.ajax({
+				type: "POST",
+				url: baseUrl + "/login",
+				data: JSON.stringify(formData),
+				success: function (response) {
+					popUp(response)
+					if (response === "Customer") {
+						localStorage.setItem("role", "Customer")
+						window.location.assign('/')
+					} else if (response === "Admin") {
+						localStorage.setItem("role", "Admin")
+						window.location.assign('/admin.html')
+					}
+				},
+				error: function ($xhr, textStatus, errorThrown) {
+					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+					// console.log("ERROR : ",  userData.message);
+					var mes = $("#modal-body");
+					mes.empty();
+					mes.append("Error : ", userData.error, "  ", "Status: ", userData.status);
+					$("#myModal").modal("show");
+					$("#login")[0].reset();
+				},
+				// dataType : "json",
+				contentType: "application/json; charset=utf-8"
+			});
+		})
+	}
+
+	var register = $('#register')
+	if (register != null) {
+
+		register.on("submit", function (e) {
+			e.preventDefault()
+			const formData = formToObj(e.target)
+
+			$.ajax({
+				type: "POST",
+				url: baseUrl + "/customer/save",
+				data: JSON.stringify(formData),
+				success: function (response) {
+					if (response == "Saved") {
+						window.location.assign('/login.html')
+					} else {
+						popUp(response)
+					}
+				},
+				error: function ($xhr, textStatus, errorThrown) {
+					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+					// console.log("ERROR : ",  userData.message);
+					var mes = $("#modal-body");
+					mes.empty();
+					mes.append("Error : ", userData.error, "  ", "Status: ", userData.status);
+					$("#myModal").modal("show");
+					$("#login")[0].reset();
+				},
+				// dataType : "json",
+				contentType: "application/json; charset=utf-8"
+			});
+		})
+	}
+
+	function tableBuilder(table, data, attrs) {
+		const tableWrapper = $(table)
+		if (tableBuilder != null) {
+			tableWrapper.find("tbody").empty()
+			const header = tableWrapper.find("thead").find("tr")
+			header.empty()
+			for (let index = 0; index < attrs.length; index++) {
+				const element = attrs[index];
+				header.append(`<th>${element.toUpperCase()}</th>`)
+			}
+			for (let index = 0; index < data.length; index++) {
+				const element = data[index];
+				let row = ""
+				for (const key in element) {
+					if (Object.hasOwnProperty.call(element, key)) {
+						const innerElement = element[key];
+						if (attrs.includes(key)) {
+							row += `<td>${innerElement || "Not given"}</td>`
+						}
+					}
+				}
+				tableWrapper.find("tbody").append(`
+				<tr>
+                    ${row}
+				</tr>`)
+			}
+		}
+	}
+	function getAllData(url, table, attrs) {
+		$.ajax({
+			type: "GET",
+			url,
+			success: function (result) {
+				tableBuilder(table, result, attrs)
+				if ($(table) != null && $(table).DataTable != undefined) {
+					$(table).DataTable();
+				}
+			},
+			contentType: "application/json; charset=utf-8"
+		});
+	}
+	getAllData(baseUrl + "/admin/", ".admin-table", ["user_id", "first_name", "last_name", "email"])
+	getAllData(baseUrl + "/customer/", ".customer-table", ["customer_id", "address", "driver_licence"])
+	getAllData(baseUrl + "/car", ".car-table", ["car_id", "brand", "model", "color"])
+
+
+
+
+	const paginationWrapper = $(".block-27")
+	if (paginationWrapper != null) {
+		const paginationList = paginationWrapper.find("ul")
+		paginationList.empty()
+		$.ajax({
+			type: "GET",
+			url: baseUrl + "/car",
+			success: function (result) {
+				if (Array.isArray(result)) {
+					// $(".cars-list").empty()
+					if (queries.page) {
+						const from = (queries.page - 1) * 6
+						const to = from + 6
+						$.each(result.slice(from, to), function (index) {
+							const element = result[index]
+
+							if (!element.is_rent)
+								$(".cars-list").append(`<div class="col-md-4">
+							<div class="car-wrap rounded ftco-animate">
+								<div class="img rounded d-flex align-items-end"
+									style="background-image: url(http://localhost:8080/Upload/${element.image1});">
+								</div>
+								<div class="text">
+									<h2 class="mb-0"><a href="car-single.html">${element.model}</a></h2>
+									<div class="d-flex mb-3">
+										<span class="cat">${element.brand}</span>
+										<p class="price ml-auto">$${element.price_per_day} <span>/day</span></p>
+									</div>
+									<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a
+											href="car-single.html?id=${element.car_id}" class="btn btn-secondary py-2 ml-1">Details</a></p>
+								</div>
+							</div>
+						</div>`)
+						})
+					} else {
+						$.each(result.slice(0, 7), function (index) {
+							const element = result[index]
+
+							if (!element.is_rent)
+								$(".cars-list").append(`<div class="col-md-4">
+							<div class="car-wrap rounded ftco-animate">
+								<div class="img rounded d-flex align-items-end"
+									style="background-image: url(http://localhost:8080/Upload/${element.image1});">
+								</div>
+								<div class="text">
+									<h2 class="mb-0"><a href="car-single.html">${element.model}</a></h2>
+									<div class="d-flex mb-3">
+										<span class="cat">${element.brand}</span>
+										<p class="price ml-auto">$${element.price_per_day} <span>/day</span></p>
+									</div>
+									<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a
+											href="car-single.html?id=${element.car_id}" class="btn btn-secondary py-2 ml-1">Details</a></p>
+								</div>
+							</div>
+						</div>`)
+						})
+					}
+					contentWayPoint();
+					const pageSize = Math.round(result.length / 5)
+					let navs = ""
+					for (let index = 1; index <= pageSize; index++) {
+						if (queries.page && queries.page == index) {
+							navs += `<li class="active"><span>${index}</span></li>`
+						}
+						else {
+							navs += `<li><a href="?page=${index}">${index}</a></li>`
+						}
+					}
+					paginationList.append(navs)
+					paginationList.append(`<li><a href="#">&gt;</a></li>`)
+					paginationList.prepend(`<li><a href="#">&lt;</a></li>`)
+				}
+			},
+			contentType: "application/json; charset=utf-8"
+		});
+	}
 })(jQuery);
 
