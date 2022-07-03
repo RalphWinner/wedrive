@@ -41,7 +41,7 @@ public class LoginController {
 				if(tempuser.getUser_type().equals("Admin")){
 					return "Admin."+adminService.findAdminbyUserID(tempuser).getAdmin_id();
 				}else{
-					return "Customer."+adminService.findAdminbyUserID(tempuser).getAdmin_id();
+					return "Customer."+customerService.findCustomerbyUserID(tempuser).getCustomer_id();
 				}
 			}
 		}

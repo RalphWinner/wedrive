@@ -1,5 +1,6 @@
 package com.wedrive.service;
 
+import com.wedrive.model.Admin;
 import com.wedrive.model.Customer;
 import com.wedrive.model.User;
 
@@ -13,4 +14,5 @@ public interface CustomerService {
     String saveCustomer(Customer customer);
     void updateCustomer(Customer customer);
     void deleteCustomer(Long id);
+    Customer findCustomerbyUserID(User user);
 }
