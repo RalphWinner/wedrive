@@ -343,6 +343,29 @@
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 	<script src="js/google-map.js"></script>
 	<script src="js/main.js"></script>
+	<script>
+		var carDetails = $("ftco-car-details")
+		if (carDetails != null) {
+			$.ajax({
+				type: "GET",
+				url: baseUrl + "/car/" + queries.id,
+				success: function (result) {
+					const mainDetails = $(".car-details")
+					if (mainDetails != null) {
+						mainDetails.find("div.img.rounded").css('background-image', 'url(/Upload/' + result.image1 + ')')
+						mainDetails.find(".text .subheading").text(result.brand)
+						mainDetails.find(".text h2").text(result.model)
+						$("#mileage").text(result.mileage)
+						$("#max_capacity").text(result.max_capacity)
+						$("#max_bag_allow").text(result.max_bag_allow)
+						$("#last_service_date").text(result.last_service_date || "Not shown")
+						$("#year").text(result.year || "Not shown")
+						$("#price_per_day").text(result.price_per_day + "$")
+					}
+				}
+			})
+		}
+	</script>
 </body>
 
 </html>

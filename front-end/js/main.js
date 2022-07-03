@@ -496,8 +496,11 @@ AOS.init({
 				url: baseUrl + "/customer/save",
 				data: JSON.stringify(formData),
 				success: function (response) {
-					popUp(response)
-					window.location.assign('/login.html')
+					if (response == "Saved") {
+						window.location.assign('/login.html')
+					} else {
+						popUp(response)
+					}
 				},
 				error: function ($xhr, textStatus, errorThrown) {
 					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
@@ -560,27 +563,7 @@ AOS.init({
 	getAllData(baseUrl + "/car", ".car-table", ["car_id", "brand", "model", "color"])
 
 
-	var carDetails = $("ftco-car-details")
-	if (carDetails != null) {
-		$.ajax({
-			type: "GET",
-			url: baseUrl + "/car/" + queries.id,
-			success: function (result) {
-				const mainDetails = $(".car-details")
-				if (mainDetails != null) {
-					mainDetails.find("div.img.rounded").css('background-image', 'url(/Upload/' + result.image1 + ')')
-					mainDetails.find(".text .subheading").text(result.brand)
-					mainDetails.find(".text h2").text(result.model)
-					$("#mileage").text(result.mileage)
-					$("#max_capacity").text(result.max_capacity)
-					$("#max_bag_allow").text(result.max_bag_allow)
-					$("#last_service_date").text(result.last_service_date || "Not shown")
-					$("#year").text(result.year || "Not shown")
-					$("#price_per_day").text(result.price_per_day + "$")
-				}
-			}
-		})
-	}
+
 
 	const paginationWrapper = $(".block-27")
 	if (paginationWrapper != null) {
@@ -621,7 +604,7 @@ AOS.init({
 							const element = result[index]
 
 							if (!element.is_rent)
-							$(".cars-list").append(`<div class="col-md-4">
+								$(".cars-list").append(`<div class="col-md-4">
 							<div class="car-wrap rounded ftco-animate">
 								<div class="img rounded d-flex align-items-end"
 									style="background-image: url(http://localhost:8080/Upload/${element.image1});">
