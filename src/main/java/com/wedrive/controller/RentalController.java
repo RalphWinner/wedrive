@@ -1,5 +1,6 @@
 package com.wedrive.controller;
 
+import com.wedrive.Utils.Utils;
 import com.wedrive.model.Car;
 import com.wedrive.model.Customer;
 import com.wedrive.model.Payment;
@@ -54,7 +55,9 @@ public class RentalController {
 
         Rental savedRental = rentalService.saveRental(rental);
         payment.setRental(savedRental);
-        payment.setAmount();
+        Utils utils = new Utils();
+        float amount = utils.generateAmount(rental.getStart_date(), rental.getEnd_date(), rental.getCar().getPrice_per_day());
+        payment.setAmount(amount);
         paymentService.savePayment(payment);
 
         SendEmail sendEmail = new SendEmail();

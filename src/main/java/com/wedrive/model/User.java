@@ -1,6 +1,7 @@
 package com.wedrive.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.wedrive.Utils.Utils;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.crypto.Cipher;
@@ -80,25 +81,8 @@ public class User {
 
     public void setPassword(String password)
     {
-        this.password = cryptPassword(password);
-    }
-
-    public String cryptPassword(String password)
-    {
-        byte[] keyData = DatatypeConverter.parseHexBinary("83014C46494E2E56414C45524546");
-
-        Key secretKey = new SecretKeySpec(keyData, "Blowfish");
-        byte[] ciphertext = null;
-        try {
-            Cipher cipher = Cipher.getInstance("Blowfish");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            ciphertext = cipher.doFinal(password.getBytes());
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-        String encrypted = DatatypeConverter.printHexBinary(ciphertext);
-        return encrypted;
+        Utils utils = new Utils();
+        this.password = utils.cryptPassword(password);
     }
     public Customer getCustomer() {
         return customer;
