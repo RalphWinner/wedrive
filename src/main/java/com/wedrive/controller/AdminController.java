@@ -51,7 +51,7 @@ public class AdminController {
     }
 
     @PostMapping("/save")
-    String saveAdmin(@RequestBody Admin admin)
+    public String saveAdmin(@RequestBody Admin admin)
     {
         try {
         User user = admin.getUser();
