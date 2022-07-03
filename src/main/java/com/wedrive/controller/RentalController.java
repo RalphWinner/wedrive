@@ -11,6 +11,7 @@ import com.wedrive.service.PaymentService;
 import com.wedrive.service.RentalService;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -59,6 +60,9 @@ public class RentalController {
         float amount = utils.generateAmount(rental.getStart_date(), rental.getEnd_date(), rental.getCar().getPrice_per_day());
         payment.setAmount(amount);
         paymentService.savePayment(payment);
+
+        SimpleDateFormat sdfSource = new SimpleDateFormat(
+                "ddd, MMM dd yyyy");
 
         SendEmail sendEmail = new SendEmail();
         sendEmail.SendingEMail("WeDrive MPP Project Rental Created"
