@@ -6,6 +6,7 @@ import com.wedrive.repository.CarRepository;
 import com.wedrive.service.CarService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public List<Car> findAllCarAvailable()
     {
-        List<Car> carList = null;
+        List<Car> carList = new ArrayList<>();
         for (Car car: carRepository.findAll()){
             if(!car.getIs_rent()){
                 carList.add(car);
@@ -39,7 +40,6 @@ public class CarServiceImpl implements CarService {
         }
         return carList;
     }
-
     @Override
     public Car saveCar(Car car)
     {

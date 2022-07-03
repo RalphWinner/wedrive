@@ -37,7 +37,8 @@ public class CarController {
     }
 
     @GetMapping("/available")
-    public List<Car> findAllCarAvailable(){
+    public List<Car> findAllCarAvailable()
+    {
         return carService.findAllCarAvailable();
     }
 
