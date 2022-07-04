@@ -457,6 +457,7 @@ AOS.init({
 		loginButton.text("Logout")
 		loginButton.click(function () {
 			localStorage.removeItem("role")
+			localStorage.removeItem("username")
 			window.location.assign("/")
 			return false;
 		})
