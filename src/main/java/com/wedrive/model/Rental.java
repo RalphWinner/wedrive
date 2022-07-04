@@ -15,11 +15,11 @@ public class Rental {
     @Column(name = "status")
     private String status;
     @Column(name = "start_date")
-    private LocalDateTime  start_date;
+    private LocalDateTime start_date;
     @Column(name = "end_date")
     private LocalDateTime end_date;
     @Column(name = "insert_date")
-    private LocalDateTime  insert_date;
+    private LocalDateTime insert_date;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id", referencedColumnName = "car_id")
     private Car car;

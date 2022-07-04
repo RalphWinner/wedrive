@@ -31,19 +31,18 @@ public class RentalController {
     }
 
     @PostMapping(value = "save/{car_id}/{customer_id}")
-    public String saveRental(@RequestBody Payment payment, @PathVariable Long car_id, @PathVariable Long customer_id)
-    {
+    public String saveRental(@RequestBody Payment payment, @PathVariable Long car_id, @PathVariable Long customer_id) {
         Customer customer;
         Car car;
         try {
             customer = customerService.findByID(customer_id).get();
             car = carService.findByID(car_id).get();
-        }catch (Exception e) {
+        } catch (Exception e) {
             return "Not saved, car or customer are not exist";
         }
-        if(rentalService.isCarRent(car)){
+        if (rentalService.isCarRent(car)) {
             return "Car already Rent, Cannot save.";
-        } else if(!rentalService.checkDateisGood(payment.getRental().getStart_date(), payment.getRental().getEnd_date())){
+        } else if (!rentalService.checkDateisGood(payment.getRental().getStart_date(), payment.getRental().getEnd_date())) {
             return "Date is not Correct";
         }
         car.setIs_rent(true);
