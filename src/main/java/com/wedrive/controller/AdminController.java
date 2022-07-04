@@ -94,7 +94,7 @@ public class AdminController {
     }
 
     @GetMapping("/")
-    List<Admin> findAllAdmin(){
-        return adminService.findAllAdmin();
+    List<User> findAllAdmin(){
+        return userService.findAllUser();
     }
 }

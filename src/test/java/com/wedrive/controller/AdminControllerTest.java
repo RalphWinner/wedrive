@@ -32,7 +32,7 @@ public class AdminControllerTest extends AbstractTest {
 
     @Test
     public void adminSave() throws  Exception{
-        String uri="api/v1/admin/save";
+        String uri="/api/v1/admin/save";
         User user=new User(1L, "Jack","Johnes", "a@a.com", "+998998884684", LocalDateTime.of(2022, 1,1,12,30),"1234",null, null );
         Admin admin= new Admin(1L,"123123123", user);
         String inputJson = super.mapToJson(admin);
