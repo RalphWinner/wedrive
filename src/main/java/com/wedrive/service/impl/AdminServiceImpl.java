@@ -65,4 +65,9 @@ public class AdminServiceImpl implements AdminService {
     public boolean isAdminExist(Long admin_id) {
         return adminRepository.existsById(admin_id);
     }
+
+    @Override
+    public Admin findAdminbyUserID(User user) {
+        return adminRepository.findByUser(user);
+    }
 }

@@ -9,7 +9,6 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @Entity
 @Table(name = "payment")
 public class Payment {
-    private static final float TAXE = 0.092f;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long payment_id;
@@ -17,7 +16,7 @@ public class Payment {
     @Column(name = "amount")
     private float amount;
     @Column(name = "payment_transaction_number")
-    private String payment_method;
+    private String payment_transaction_number;
     @OneToOne
     @JoinColumn(name = "rental_id")
     private Rental rental;
@@ -30,12 +29,20 @@ public class Payment {
         this.payment_id = payment_id;
     }
 
-    public String getPayment_method() {
-        return payment_method;
+    public float getAmount() {
+        return amount;
     }
 
-    public void setPayment_method(String payment_method) {
-        this.payment_method = payment_method;
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    public String getPayment_transaction_number() {
+        return payment_transaction_number;
+    }
+
+    public void setPayment_transaction_number(String payment_transaction_number) {
+        this.payment_transaction_number = payment_transaction_number;
     }
 
     public Rental getRental() {
@@ -46,24 +53,10 @@ public class Payment {
         this.rental = rental;
     }
 
-    public float getAmount() {
-        return amount;
-    }
-
-    public void setAmount() {
-        try{
-            long noOfDaysBetween = ChronoUnit.DAYS.between(rental.getStart_date(), rental.getEnd_date());
-            this.amount = this.rental.getCar().getPrice_per_day()*noOfDaysBetween;
-            this.amount*=(1 + TAXE);
-        }catch (Exception e){
-            this.amount = 0;
-        }
-    }
-
-    public Payment(long payment_id, float amount, String payment_method, Rental rental) {
+    public Payment(long payment_id, float amount, String payment_transaction_number, Rental rental) {
         this.payment_id = payment_id;
         this.amount = amount;
-        this.payment_method = payment_method;
+        this.payment_transaction_number = payment_transaction_number;
         this.rental = rental;
     }
 

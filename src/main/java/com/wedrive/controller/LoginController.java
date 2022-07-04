@@ -3,6 +3,7 @@ package com.wedrive.controller;
 import com.wedrive.model.Customer;
 import com.wedrive.service.AdminService;
 import com.wedrive.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +15,11 @@ import com.wedrive.service.UserService;
 @RestController
 @RequestMapping("api/v1")
 public class LoginController {
-
+	@Autowired
     private UserService userService;
+	@Autowired
     private AdminService adminService;
+	@Autowired
     private CustomerService customerService;
 
 
@@ -25,7 +28,6 @@ public class LoginController {
 		try {
 			String email = user.getEmail();
 			String password = user.getPassword();
-			password = user.cryptPassword(password);
 			return UserExistType(email, password);
 		}catch (Exception e){
 			return "Cannot Login in -> " + e.toString();
@@ -36,10 +38,10 @@ public class LoginController {
 	{
 		for (User tempuser: userService.findAllUser()){
 			if(tempuser.getEmail().equals(email) && tempuser.getPassword().equals(password)){
-				if(tempuser.getUser_type() == "Admin"){
-					return "Admin."+tempuser.getUser_id();
+				if(tempuser.getUser_type().equals("Admin")){
+					return "Admin."+adminService.findAdminbyUserID(tempuser).getAdmin_id()+"."+tempuser.getFirst_name() + " " + tempuser.getLast_name();
 				}else{
-					return "Customer."+tempuser.getUser_id();
+					return "Customer."+customerService.findCustomerbyUserID(tempuser).getCustomer_id()+"."+tempuser.getFirst_name() + " " + tempuser.getLast_name();
 				}
 			}
 		}

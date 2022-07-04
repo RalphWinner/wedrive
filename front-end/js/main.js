@@ -352,7 +352,7 @@ AOS.init({
 	}
 	var addAdmin = $('#addAdmin')
 
-	if (addAdmin != null) {
+	if (addAdmin.length) {
 
 		addAdmin.on("submit", function (e) {
 			e.preventDefault()
@@ -387,7 +387,7 @@ AOS.init({
 
 
 	var addCar = $('#addCar')
-	if (addCar != null) {
+	if (addCar.length) {
 		addCar.on("submit", function (e) {
 			e.preventDefault()
 			const formData = formToObj(e.target)
@@ -402,9 +402,9 @@ AOS.init({
 					type: 'application/json'
 				})
 			);
-
+			const userId = localStorage.getItem("user_id")
 			var settings = {
-				"url": baseUrl + "/car/save/1/",
+				"url": baseUrl + `/car/save/${userId}/`,
 				"method": "POST",
 				"timeout": 0,
 				"processData": false,
@@ -423,7 +423,7 @@ AOS.init({
 		})
 	}
 	var addCustomer = $('#addCustomer')
-	if (addCustomer != null) {
+	if (addCustomer.length) {
 		addCustomer.on("submit", function (e) {
 			e.preventDefault()
 			const formData = formToObj(e.target)
@@ -453,7 +453,7 @@ AOS.init({
 	}
 
 	var loginButton = $('a[href="login.html"]')
-	if (loginButton != null && localStorage.getItem("role") != null) {
+	if (loginButton.length && localStorage.getItem("role") != null) {
 		loginButton.text("Logout")
 		loginButton.click(function () {
 			localStorage.removeItem("role")
@@ -462,7 +462,7 @@ AOS.init({
 		})
 	}
 	var login = $('#login')
-	if (login != null) {
+	if (login.length) {
 
 		login.on("submit", function (e) {
 			e.preventDefault()
@@ -474,13 +474,22 @@ AOS.init({
 				data: JSON.stringify(formData),
 				success: function (response) {
 					popUp(response)
-					if (response === "Customer") {
-						localStorage.setItem("role", "Customer")
-						window.location.assign('/')
-					} else if (response === "Admin") {
-						localStorage.setItem("role", "Admin")
-						window.location.assign('/admin.html')
+					const parsedResponse = response.split(".")
+					if (parsedResponse.length >= 2) {
+						const role = parsedResponse[0]
+						const id = parsedResponse[1]
+						const userName = parsedResponse[2]
+						localStorage.setItem("user_id", id)
+						localStorage.setItem("username", userName)
+						if (role === "Customer") {
+							localStorage.setItem("role", "Customer")
+							window.location.assign('/')
+						} else if (role === "Admin") {
+							localStorage.setItem("role", "Admin")
+							window.location.assign('/admin.html')
+						}
 					}
+
 				},
 				error: function ($xhr, textStatus, errorThrown) {
 					let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
@@ -498,7 +507,7 @@ AOS.init({
 	}
 
 	var register = $('#register')
-	if (register != null) {
+	if (register.length) {
 
 		register.on("submit", function (e) {
 			e.preventDefault()
@@ -530,15 +539,42 @@ AOS.init({
 		})
 	}
 
-	function tableBuilder(table, data, attrs) {
+	var carDetails = $(".ftco-car-details")
+	if (carDetails.length) {
+		$.ajax({
+			type: "GET",
+			url: baseUrl + "/car/" + queries.id,
+			success: function (result) {
+				const mainDetails = $(".car-details")
+				if (mainDetails.length) {
+					console.log(result)
+					mainDetails.find("div.img.rounded").css('background-image', 'url(http://localhost:8080/Upload/' + result.image1 + ')')
+					mainDetails.find(".text .subheading").text(result.brand)
+					mainDetails.find(".text h2").text(result.model)
+					$("#mileage").text(result.mileage)
+					$("#max_capacity").text(result.max_capacity)
+					$("#max_bag_allow").text(result.max_bag_allow)
+					$("#last_service_date").text(result.last_service_date || "Not shown")
+					$("#year").text(result.year || "Not shown")
+					$("#price_per_day").text(result.price_per_day + "$")
+				}
+			}
+		})
+	}
+
+	function tableBuilder(table, data, attrs, deleteUrl) {
 		const tableWrapper = $(table)
-		if (tableBuilder != null) {
+		if (tableBuilder.length) {
 			tableWrapper.find("tbody").empty()
 			const header = tableWrapper.find("thead").find("tr")
 			header.empty()
+
 			for (let index = 0; index < attrs.length; index++) {
 				const element = attrs[index];
 				header.append(`<th>${element.toUpperCase()}</th>`)
+			}
+			if (data.length > 0) {
+				header.append(`<th>Actions</th>`)
 			}
 			for (let index = 0; index < data.length; index++) {
 				const element = data[index];
@@ -551,35 +587,54 @@ AOS.init({
 						}
 					}
 				}
+				if (data.length > 0) {
+					row += `<td><button class="deleteRecord btn btn-danger" data-id="${element[attrs[0]]}">Delete</button></td>`
+				}
 				tableWrapper.find("tbody").append(`
-				<tr>
-                    ${row}
-				</tr>`)
+					<tr>
+						${row}
+					</tr>`)
+				$(".deleteRecord").click(function (e) {
+					e.preventDefault()
+					const id = $(e.target).data("id")
+					var result = confirm("Want to delete?");
+					if (result) {
+						$.ajax({
+							type: "DELETE",
+							url: (deleteUrl.charAt(deleteUrl.length - 1) == "/" ? deleteUrl + id : deleteUrl + "/" + id),
+							success: function (result) {
+								alert("Record has beed deleted successfully")
+								return false
+							},
+							// contentType: "application/json; charset=utf-8"
+						});
+					}
+				})
 			}
 		}
 	}
-	function getAllData(url, table, attrs) {
+	function getAllData(url, table, attrs, deleteUrl = "") {
 		$.ajax({
 			type: "GET",
 			url,
 			success: function (result) {
-				tableBuilder(table, result, attrs)
-				if ($(table) != null && $(table).DataTable != undefined) {
+				tableBuilder(table, result, attrs, url)
+				if ($(table).length && $(table).DataTable != undefined) {
 					$(table).DataTable();
 				}
 			},
 			contentType: "application/json; charset=utf-8"
 		});
 	}
-	getAllData(baseUrl + "/admin/", ".admin-table", ["user_id", "first_name", "last_name", "email"])
+	getAllData(baseUrl + "/admin/", ".admin-table", [ "last_name","first_name","email","user_type"])
 	getAllData(baseUrl + "/customer/", ".customer-table", ["customer_id", "address", "driver_licence"])
 	getAllData(baseUrl + "/car", ".car-table", ["car_id", "brand", "model", "color"])
-
+	// getAllData(baseUrl + "/order", ".orders-table", ["car_id", "brand", "model", "color"])
 
 
 
 	const paginationWrapper = $(".block-27")
-	if (paginationWrapper != null) {
+	if (paginationWrapper.length) {
 		const paginationList = paginationWrapper.find("ul")
 		paginationList.empty()
 		$.ajax({
@@ -606,7 +661,7 @@ AOS.init({
 										<span class="cat">${element.brand}</span>
 										<p class="price ml-auto">$${element.price_per_day} <span>/day</span></p>
 									</div>
-									<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a
+									<p class="d-flex mb-0 d-block"><a data-id="${element.car_id}" href="#" class="book-car btn btn-primary py-2 mr-1">Book now</a> <a
 											href="car-single.html?id=${element.car_id}" class="btn btn-secondary py-2 ml-1">Details</a></p>
 								</div>
 							</div>
@@ -628,11 +683,82 @@ AOS.init({
 										<span class="cat">${element.brand}</span>
 										<p class="price ml-auto">$${element.price_per_day} <span>/day</span></p>
 									</div>
-									<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a
+									<p class="d-flex mb-0 d-block"><a data-id="${element.car_id}" href="#" class="book-car btn btn-primary py-2 mr-1">Book now</a> <a
 											href="car-single.html?id=${element.car_id}" class="btn btn-secondary py-2 ml-1">Details</a></p>
 								</div>
 							</div>
 						</div>`)
+						})
+					}
+					const bookCar = $("a.book-car")
+					if (bookCar.length) {
+						bookCar.click(function (e) {
+							e.preventDefault()
+							if ((localStorage.getItem("user_id") && localStorage.getItem("role")) == false) {
+								window.location.assign("/login.html")
+							}
+							const carId = bookCar.data("id")
+							$("#myModal").find(".modal-title").empty()
+							$("#myModal").find(".modal-body").empty()
+							$("#myModal").find(".modal-title").append(`
+								Fill the form to order this car!
+							`)
+							$("#myModal").find(".modal-body").append(`
+<form id="createBooking" class="mb-3 request-form bg-primary"
+                                enctype="multipart/form-data">
+                                <div class="d-flex">
+                                    <div class="form-group mr-2">
+										<label class="label">Start date</label>
+                                        <input type="date" class="form-control" name="rental.start_date" placeholder="Brand">
+                                    </div>
+                                    <div class="form-group ml-2">
+										<label class="label">End date</label>
+                                        <input type="date" class="form-control" name="rental.end_date" placeholder="Model">
+                                    </div>
+                                </div>
+								<div class="d-flex">
+									<div class="form-group ml-2">
+										<input type="text" class="form-control" name="payment_transaction_number" placeholder="Payment transaction number">
+                                    </div>
+								</div>
+                                <input type="submit" value="Add admin" class="btn btn-secondary py-2 px-2">
+
+                            </form>`)
+							const createBooking = $("#createBooking")
+							if (createBooking.length) {
+								createBooking.on("submit", function (e) {
+									e.preventDefault()
+									const formData = formToObj(e.target)
+									console.log(formData)
+									formData.rental.start_date += "T00:00:00.000"
+									formData.rental.end_date += "T00:00:00.000"
+									$.ajax({
+										type: "POST",
+										url: baseUrl + "/rental/save/" + carId + "/" + localStorage.getItem("user_id"),
+										data: JSON.stringify(formData),
+										success: function (response) {
+											popUp(response)
+											return false
+										},
+										error: function ($xhr, textStatus, errorThrown) {
+											alert("Error")
+											// let userData = JSON.parse(JSON.stringify($xhr.responseJSON))
+											// // console.log("ERROR : ",  userData.message);
+											// var mes = $("#modal-body");
+											// mes.empty();
+											// mes.append("Error : ", userData.error, "  ", "Status: ", userData.status);
+											// $("#myModal").modal("show");
+											// $("#login")[0].reset();
+											return false
+										},
+										// dataType : "json",
+										contentType: "application/json; charset=utf-8"
+									});
+									return false
+								})
+							}
+							$("#myModal").modal("show");
+							return false
 						})
 					}
 					contentWayPoint();

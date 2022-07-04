@@ -12,4 +12,5 @@ public interface AdminService {
     Admin findAdminbyID(Long id);
     Boolean checkSSN(Admin admin);
     boolean isAdminExist(Long admin_id);
+    Admin findAdminbyUserID(User user);
 }

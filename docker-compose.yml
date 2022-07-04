@@ -6,6 +6,8 @@ services:
       - 80:80
     volumes:
       - ./front-end:/usr/share/nginx/html
+    depends_on:
+      - app
   app:
     build:
       context: .
