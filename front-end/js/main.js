@@ -11,7 +11,7 @@ AOS.init({
 		function getItem(){
 			let name = localStorage.getItem('username')
 			if(name != null){
-				$('#loggedUSer').text(name)
+				$('#loggedUser').text(name)
 
 				// document.getElementById("loggedUser").innerHTML = name
 			}else{
