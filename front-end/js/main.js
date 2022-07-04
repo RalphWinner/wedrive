@@ -7,6 +7,19 @@ AOS.init({
 
 	"use strict";
 
+		//Function to set logged in user name
+		function getItem(){
+			let name = localStorage.getItem('username')
+			if(name != null){
+				$('#loggedUSer').text(name)
+
+				// document.getElementById("loggedUser").innerHTML = name
+			}else{
+				$('#loggedUser').hide()
+			}
+		}
+		getItem();
+
 	const baseUrl = "http://localhost:8080/api/v1"
 	var isMobile = {
 		Android: function () {
@@ -641,5 +654,8 @@ AOS.init({
 			contentType: "application/json; charset=utf-8"
 		});
 	}
+
+
+
 })(jQuery);
 
